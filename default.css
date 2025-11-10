@@ -1,0 +1,89 @@
+h1 {
+    font-family: "Bauhaus 93";
+    font-size: 50px;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #9c251e;
+    color: ghostwhite;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0px 100px 0px;
+    flex-grow: 1;
+}
+
+main a {
+    align-content: center;
+    text-align: center;
+    width: 75%;
+    font-size: 50px;
+    width: 66%;
+    background-color: #9c251e;
+    color: ghostwhite;
+    border: 10px ghostwhite;
+    padding: 10px 0px;
+    font-family: "Bauhaus 93";
+    text-decoration: none;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    background-color: black;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+p {
+    color: ghostwhite;
+    font-family: "Courier New";
+    font-weight: bolder;
+    font-size: larger;
+}
+
+li {
+    color: ghostwhite;
+    font-family: "Courier New";
+    font-weight: bolder;
+    list-style-type: none;
+    font-size: larger;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #9c251e;
+    color: ghostwhite;
+}
+
+footer a {
+    align-content: center;
+    text-align: center;
+    width: 75%;
+    font-size: 50px;
+    width: 66%;
+    background-color: #9c251e;
+    color: ghostwhite;
+    border: 10px ghostwhite;
+    padding: 10px 0px;
+    font-family: "Bauhaus 93";
+    text-decoration: none;
+}
