@@ -87,3 +87,31 @@ footer a {
     font-family: "Bauhaus 93";
     text-decoration: none;
 }
+
+#gameCanvas {
+    background-color: ghostwhite;
+    border: #9c251e 10px solid;
+}
+
+#canvasContainer {
+    padding: 20px;
+}
+
+#gameFooter a {
+    align-content: center;
+    text-align: center;
+    width: 75%;
+    font-size: 25px;
+    width: 66%;
+    background-color: #9c251e;
+    color: ghostwhite;
+    border: 10px ghostwhite;
+    padding: 10px 0px;
+    font-family: "Bauhaus 93";
+    text-decoration: none;
+}
+
+#gameHeader h1 {
+    font-family: "Bauhaus 93";
+    font-size: 28px;
+}
