@@ -20,9 +20,17 @@ function mainLoop() {
     if (gameStarted) {
         // Draw collision boxes
         roomsCollision[room].forEach(drawRectFromObj);
+        // Draw room objects
+        roomObjects[room].forEach(drawObjects);
 
         // Draw player sprite
-        ctx.drawImage(char.Sprite, char.X, char.Y);
+        ctx.drawImage(char.sprite, char.X, char.Y);
+    }
+}
+// Draw the room's objects
+function drawObjects (obj) {
+    if (obj.destroyed === false) {
+        ctx.drawImage(obj.sprite, obj.X, obj.Y);
     }
 }
 
@@ -58,6 +66,76 @@ function drawRectFromObj(rectObj) {
     ctx.fillRect(rectObj.X, rectObj.Y, rectObj.W, rectObj.H);
 }
 
+// Runs when E is pressed
+function attemptInteract() {
+    if (verbose >= 1) {
+        drawRectFromObj(createBoxInFrontOf(char, 50, 50));
+    }
+    // Iterate through the current room's objects
+    for (i = 0; i < roomObjects[room].length; i++) {
+        // Create a box in front of the player to compare to object distance
+        let boxToCheck = createBoxInFrontOf(char, 50, 50);
+
+        if (verbose >= 1) {
+            console.log("Interaction distance check:" + checkCollBetween(boxToCheck, roomObjects[room][i]) + " Interactable: " + roomObjects[room][i].interactable);
+        }
+
+        if (checkCollBetween(boxToCheck, roomObjects[room][i]) && roomObjects[room][i].interactable) {
+            if (roomObjects[room][i].interactionID === 0) { // If it's room 1 miku
+                // IMPLEMENT
+            }
+            if (roomObjects[room][i].interactionID === 1) { // If it's room 1 lever
+                // IMPLEMENT
+            }
+            if (roomObjects[room][i].interactionID === 2) { // If it's room 3 lever 1
+                // IMPLEMENT
+            }
+            if (roomObjects[room][i].interactionID === 3) { // If it's room 3 lever 2
+                // IMPLEMENT
+            }
+            if (roomObjects[room][i].interactionID === 4) { // If it's room 3 lever 3
+                // IMPLEMENT
+            }
+            if (roomObjects[room][i].interactionID === 5) { // If it's room 3 lever 4
+                // IMPLEMENT
+            }
+        }
+    }
+}
+
+// Create an object in front of a given object with given relative width and height
+function createBoxInFrontOf (obj, W, H) {
+    let newObj = {
+        X: -1,
+        Y: -1,
+        W: -1,
+        H: -1,
+        direction: obj.direction
+    };
+    if (obj.direction === 0) {
+        newObj.X = obj.X + obj.W/2 - W/2;
+        newObj.Y = obj.Y - H;
+        newObj.W = W;
+        newObj.H = H;
+    } else if (obj.direction === 1) {
+        newObj.X = obj.X + obj.W;
+        newObj.Y = obj.Y + obj.H/2 - W/2;
+        newObj.W = H;
+        newObj.H = W;
+    } else if (obj.direction === 2) {
+        newObj.X = obj.X + obj.W/2 - W/2;
+        newObj.Y = obj.Y + obj.H;
+        newObj.W = W;
+        newObj.H = H;
+    } else if (obj.direction === 3) {
+        newObj.X = obj.X - W;
+        newObj.Y = obj.Y + obj.H/2 - W/2;
+        newObj.W = H;
+        newObj.H = W;
+    }
+    return newObj;
+}
+
 // Keypress event function
 function KeyDown() {
     if(verbose >= 2) {
@@ -69,20 +147,27 @@ function KeyDown() {
     }
     // Handle WASD movement
     if (event.key === "d" && (!checkCollision({X: char.X + char.speed, Y: char.Y, H: char.H, W: char.W}))) {
-        char.Sprite.src = "assets/game_assets/player/playerRight.png";
+        char.sprite.src = "assets/game_assets/player/playerRight.png";
+        char.direction = 1;
         char.X += char.speed;
     }
     if (event.key === "a" && (!checkCollision({X: char.X - char.speed, Y: char.Y, H: char.H, W: char.W}))) {
-        char.Sprite.src = "assets/game_assets/player/playerLeft.png";
+        char.sprite.src = "assets/game_assets/player/playerLeft.png";
+        char.direction = 3;
         char.X -= char.speed;
     }
     if (event.key === "w" && (!checkCollision({X: char.X, Y: char.Y - char.speed, H: char.H, W: char.W}))) {
-        char.Sprite.src = "assets/game_assets/player/playerUp.png";
+        char.sprite.src = "assets/game_assets/player/playerUp.png";
+        char.direction = 0;
         char.Y -= char.speed;
     }
     if (event.key === "s" && (!checkCollision({X: char.X, Y: char.Y + char.speed, H: char.H, W: char.W}))) {
-        char.Sprite.src = "assets/game_assets/player/playerDown.png";
+        char.sprite.src = "assets/game_assets/player/playerDown.png";
+        char.direction = 2;
         char.Y += char.speed;
+    }
+    if (event.key === "e") {
+        attemptInteract();
     }
 
     if (verbose >= 2) {
@@ -91,7 +176,30 @@ function KeyDown() {
     changeRoom();
 }
 
-// Check for collision - returns a boolean. true = collision, false = no collision
+// Check for collision between any two objects
+function checkCollBetween(obj1, obj2) {
+    let isCollide = false;
+
+    // Set boundaries
+    let obj1L = obj1.X;
+    let obj1R = obj1.X + obj1.W;
+    let obj1T = obj1.Y;
+    let obj1B = obj1.Y + obj1.H;
+
+    let obj2L = obj2.X;
+    let obj2R = obj2.X + obj2.W;
+    let obj2T = obj2.Y;
+    let obj2B = obj2.Y + obj2.H;
+
+    // Check if its within bounds, set to true if its inside a collidable object
+    if (!(obj1B <= obj2T || obj1T >= obj2B || obj1R <= obj2L || obj1L >= obj2R)) {
+        isCollide = true;
+    }
+    // Return result
+    return isCollide;
+}
+
+// Check for wall collision - returns a boolean. true = collision, false = no collision
 function checkCollision(spriteObj) {
     let isCollide = false;
     // Set sprite's boundaries
@@ -136,14 +244,11 @@ function checkCollision(spriteObj) {
 // Initialize game
 //
 function init() {
-    //
-    // Initialize variables
-    //
 
     // Initialize canvas and 2D context
     canvas = document.getElementById("gameCanvas");
     ctx = canvas.getContext("2d");
-    ctx.fillStyle = "green";
+
 
     // Define game size and default wall border
     canvasSize = {
@@ -159,14 +264,15 @@ function init() {
 
     //Initialize character sprite and sprite
     char = {
-        X: 960,
-        Y: 240,
-        Sprite: new Image(),
-        H: 75,
-        W: 75,
-        speed: 5
+        X: 965,
+        Y: 245,
+        sprite: new Image(),
+        H: 70,
+        W: 70,
+        speed: 5,
+        direction: 2 // 0-Up 1-Right 2-Down 3-Left
     };
-    char.Sprite.src = "assets/game_assets/player/playerDown.png";
+    char.sprite.src = "assets/game_assets/player/playerDown.png";
 
     defineRooms()
 
@@ -182,6 +288,44 @@ function init() {
 }
 
 function defineRooms () {
+    // Define Miku
+    ctx.fillStyle = "green";
+    miku = {
+        X: 565,
+        Y: 405,
+        sprite: new Image(),
+        H: 70,
+        W: 70,
+        interactable: true,
+        enemy: false,
+        interactionID: 0,
+        destructible: false,
+        destroyed: false
+    };
+    miku.sprite.src = "assets/game_assets/non_player/miku.png";
+
+    dummy = {
+        X: 85,
+        Y: 485,
+        sprite: new Image(),
+        H: 70,
+        W: 70,
+        interactable: false,
+        enemy: true,
+        destructible: false,
+        destroyed: false,
+        hp: 999
+    };
+    dummy.sprite.src = "assets/game_assets/non_player/dummy.png";
+
+
+    room1Objects = [miku, dummy];
+    room2Objects = [];
+    room3Objects = [];
+    room4Objects = [];
+    room5Objects = [];
+    roomObjects = [room1Objects, room2Objects, room3Objects, room4Objects, room5Objects];
+
     //
     // Define collision boxes for room 1
     //
@@ -221,7 +365,6 @@ function defineRooms () {
         W: defaultBorder,
         H: canvasSize.H
     };
-
     room1Wall1 = {
         ID: "r1wall1",
         X: 80,
@@ -229,7 +372,6 @@ function defineRooms () {
         W: 720,
         H: defaultBorder
     };
-
     room1Wall2 = {
         ID: "r1wall2",
         X: 320,
@@ -237,7 +379,6 @@ function defineRooms () {
         W: defaultBorder,
         H: defaultBorder
     };
-
     room1Wall3 = {
         ID: "r1wall3",
         X: 320,
@@ -245,7 +386,6 @@ function defineRooms () {
         W: defaultBorder,
         H: defaultBorder
     };
-
     room1Wall4 = {
         ID: "r1wall4",
         X: 720,
@@ -253,7 +393,6 @@ function defineRooms () {
         W: defaultBorder,
         H: defaultBorder
     };
-
     room1Wall5 = {
         ID: "r1wall5",
         X: 720,
@@ -322,6 +461,7 @@ function defineRooms () {
         W: 720,
         H: defaultBorder
     };
+
     //
     // Define room 3
     //
@@ -392,6 +532,7 @@ function defineRooms () {
         W: defaultBorder,
         H: 320
     };
+
     //
     // Define stage room
     //
@@ -410,7 +551,7 @@ function defineRooms () {
         H: 80
     };
 
-    // Create arrays for collidable objects
+    // Create arrays for walls
     room1Collision = [room1Bottom, room1Left, room1Right, room1Top1, room1Top2, room1Wall1, room1Wall2, room1Wall3, room1Wall4, room1Wall5];
     room2Collision = [room2Top, room2Bottom1, room2Bottom2, room2Left1, room2Left2, room2Right1, room2Right2, room2Center];
     room3Collision = [room2Top, room1Bottom, room1Left, room3Right1, room3Right2, room3Wall1, room3Wall2, room3Wall3, room3Wall4, room3Wall5];
