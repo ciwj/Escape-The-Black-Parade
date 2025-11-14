@@ -128,7 +128,7 @@ function createBoxInFrontOf (obj, W, H) {
         newObj.W = W;
         newObj.H = H;
     } else if (obj.direction === 3) {
-        newObj.X = obj.X - W;
+        newObj.X = obj.X - H;
         newObj.Y = obj.Y + obj.H/2 - W/2;
         newObj.W = H;
         newObj.H = W;
@@ -169,11 +169,48 @@ function KeyDown() {
     if (event.key === "e") {
         attemptInteract();
     }
+    if (event.key === "j") {
+        melee();
+    }
+    if (event.key === "k") {
+        ranged();
+    }
 
     if (verbose >= 2) {
         console.log("X: " + char.X + " Y: " + char.Y + ".");
     }
     changeRoom();
+}
+
+// Ranged attack
+function ranged() {
+
+}
+
+// Melee attack
+function melee() {
+    if (verbose >= 1) {
+        drawRectFromObj(createBoxInFrontOf(char, 90, 50));
+    }
+
+    for (i = 0; i < roomObjects[room].length; i++) {
+        // Create a box in front of the player to compare to object distance
+        let boxToCheck = createBoxInFrontOf(char, 90, 50);
+
+        if (verbose >= 1) {
+            console.log("Interaction distance check:" + checkCollBetween(boxToCheck, roomObjects[room][i]));
+        }
+
+        if (checkCollBetween(boxToCheck, roomObjects[room][i]) && roomObjects[room][i].enemy) {
+            roomObjects[room][i].hp--
+            if (roomObjects[room][i].hp <= 0) {
+                roomObjects[room][i].destroyed = true;
+            }
+            if (verbose >= 1) {
+                console.log("Hit detected! Obj HP: " + roomObjects[room][i].hp);
+            }
+        }
+    }
 }
 
 // Check for collision between any two objects
