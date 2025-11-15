@@ -18,6 +18,7 @@ function mainLoop() {
     }
     // Otherwise, draw the level
     if (gameStarted) {
+        doMovement();
         // Draw collision boxes
         roomsCollision[room].forEach(drawRectFromObj);
         // Draw room objects
@@ -27,11 +28,16 @@ function mainLoop() {
         ctx.drawImage(char.sprite, char.X, char.Y);
     }
 }
+
 // Draw the room's objects
-function drawObjects (obj) {
+function drawObjects(obj) {
     if (obj.destroyed === false) {
         ctx.drawImage(obj.sprite, obj.X, obj.Y);
     }
+}
+
+function doMovement() {
+    // IMPLEMENT
 }
 
 // Room transition function
@@ -63,7 +69,9 @@ function changeRoom() {
 
 // Helper f'n to draw a rectangle from a literal
 function drawRectFromObj(rectObj) {
-    ctx.fillRect(rectObj.X, rectObj.Y, rectObj.W, rectObj.H);
+    if (!rectObj.destroyed) {
+        ctx.fillRect(rectObj.X, rectObj.Y, rectObj.W, rectObj.H);
+    }
 }
 
 // Runs when E is pressed
@@ -85,7 +93,8 @@ function attemptInteract() {
                 // IMPLEMENT
             }
             if (roomObjects[room][i].interactionID === 1) { // If it's room 1 lever
-                // IMPLEMENT
+                // IMPLEMENT lever noise
+                r1Door.destroyed = true;
             }
             if (roomObjects[room][i].interactionID === 2) { // If it's room 3 lever 1
                 // IMPLEMENT
@@ -184,7 +193,11 @@ function KeyDown() {
 
 // Ranged attack
 function ranged() {
+    // IMPLEMENT
+}
 
+function heal() {
+    // IMPLEMENT
 }
 
 // Melee attack
@@ -265,7 +278,7 @@ function checkCollision(spriteObj) {
         }
 
         // Check if its within bounds, set to true if its inside a collidable object
-        if (!(spriteB <= collidableT || spriteT >= collidableB || spriteR <= collidableL || spriteL >= collidableR)) {
+        if (!(spriteB <= collidableT || spriteT >= collidableB || spriteR <= collidableL || spriteL >= collidableR) && !roomsCollision[room][i].destroyed) {
             isCollide = true;
             if (verbose >= 1) {
                 console.log("collision detected with " + roomsCollision[room][i].ID);
@@ -273,6 +286,7 @@ function checkCollision(spriteObj) {
         }
 
     }
+
     // Return result
     return isCollide;
 }
@@ -325,8 +339,12 @@ function init() {
 }
 
 function defineRooms () {
-    // Define Miku
+
     ctx.fillStyle = "green";
+
+    //
+    // Define non-wall objects
+    //
     miku = {
         X: 565,
         Y: 405,
@@ -355,8 +373,49 @@ function defineRooms () {
     };
     dummy.sprite.src = "assets/game_assets/non_player/dummy.png";
 
+    r1Door = {
+        X: 720,
+        Y: 160,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: false,
+        destructible: false,
+        destroyed: false
+    };
+    r1Door.sprite.src = "assets/game_assets/sprites/door.png";
 
-    room1Objects = [miku, dummy];
+    r1Lever = {
+        X: 490,
+        Y: 630,
+        sprite: new Image(),
+        H: 60,
+        W: 60,
+        interactable: true,
+        interactionID: 1,
+        enemy: false,
+        destructible: false,
+        destroyed: false
+    };
+    r1Lever.sprite.src = "assets/game_assets/sprites/lever.png";
+
+    r1Obstacle = {
+        X: 320,
+        Y: 160,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r1Obstacle.sprite.src = "assets/game_assets/sprites/obstacle.png";
+
+
+    room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle];
     room2Objects = [];
     room3Objects = [];
     room4Objects = [];
@@ -371,71 +430,90 @@ function defineRooms () {
         X: 0,
         Y: canvasSize.H - defaultBorder,
         W: canvasSize.W,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room1Top1 = {
         ID: "r1top1",
         X: 0,
         Y: 0,
         W: 160,
-        H: defaultBorder
-
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room1Top2 = {
         ID: "r1top2",
         X: 240,
         Y: 0,
         W: canvasSize.W - 320,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room1Left = {
         ID: "r1left",
         X: 0,
         Y: 0,
         W: defaultBorder,
-        H: canvasSize.H
+        H: canvasSize.H,
+        destructible: false,
+        destroyed: false
     };
     room1Right = {
         ID: "r1right",
         X: canvasSize.W - defaultBorder,
         Y: 0,
         W: defaultBorder,
-        H: canvasSize.H
+        H: canvasSize.H,
+        destructible: false,
+        destroyed: false
     };
     room1Wall1 = {
         ID: "r1wall1",
         X: 80,
         Y: 320,
         W: 720,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room1Wall2 = {
         ID: "r1wall2",
         X: 320,
         Y: 80,
         W: defaultBorder,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room1Wall3 = {
         ID: "r1wall3",
         X: 320,
         Y: 240,
         W: defaultBorder,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room1Wall4 = {
         ID: "r1wall4",
         X: 720,
         Y: 80,
         W: defaultBorder,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room1Wall5 = {
         ID: "r1wall5",
         X: 720,
         Y: 240,
         W: defaultBorder,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
 
     //
@@ -446,57 +524,72 @@ function defineRooms () {
         X: 0,
         Y: 0,
         W: canvasSize.W,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room2Bottom1 = {
         ID: "r2bottom1",
         X: 0,
         Y: canvasSize.H - defaultBorder,
         W: 160,
-        H: defaultBorder
-
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room2Bottom2 = {
         ID: "r2bottom2",
         X: 240,
         Y: canvasSize.H - defaultBorder,
         W: canvasSize.W - 320,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room2Left1 = {
         ID: "r2left1",
         X: 0,
         Y: 0,
         W: defaultBorder,
-        H: 160
+        H: 160,
+        destructible: false,
+        destroyed: false
     };
     room2Left2 = {
         ID: "r2left2",
         X: 0,
         Y: 240,
         W: defaultBorder,
-        H: 400
+        H: 400,
+        destructible: false,
+        destroyed: false
     };
     room2Right1 = {
         ID: "r2right1",
         X: canvasSize.W - defaultBorder,
         Y: 0,
         W: defaultBorder,
-        H: 320
+        H: 320,
+        destructible: false,
+        destroyed: false
     };
     room2Right2 = {
         ID: "r2right2",
         X: canvasSize.W - defaultBorder,
         Y: 400,
         W: defaultBorder,
-        H: 320
+        H: 320,
+        destructible: false,
+        destroyed: false
     };
     room2Center = {
         ID: "r2center",
         X: 0,
         Y: 320,
         W: 720,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
 
     //
@@ -507,49 +600,63 @@ function defineRooms () {
         X: canvasSize.W - 80,
         Y: 0,
         W: defaultBorder,
-        H: 160
+        H: 160,
+        destructible: false,
+        destroyed: false
     };
     room3Right2 = {
         ID: "r3right2",
         X: canvasSize.W - 80,
         Y: 240,
         W: defaultBorder,
-        H: 400
+        H: 400,
+        destructible: false,
+        destroyed: false
     };
     room3Wall1 = {
         ID: "r3w1",
         X: 480,
         Y: 160,
         W: defaultBorder,
-        H: 480
+        H: 480,
+        destructible: false,
+        destroyed: false
     };
     room3Wall2 = {
         ID: "r3w2",
         X: 880,
         Y: 0,
         W: defaultBorder,
-        H: 560
+        H: 560,
+        destructible: false,
+        destroyed: false
     };
     room3Wall3 = {
         ID: "r3w3",
         X: 640,
         Y: 480,
         W: 320,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room3Wall4 = {
         ID: "r3w4",
         X: 640,
         Y: 160,
         W: 160,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
     room3Wall5 = {
         ID: "r3w5",
         X: 640,
         Y: 320,
         W: defaultBorder,
-        H: defaultBorder
+        H: defaultBorder,
+        destructible: false,
+        destroyed: false
     };
 
     //
@@ -560,14 +667,18 @@ function defineRooms () {
         X: 0,
         Y: 0,
         W: defaultBorder,
-        H: 320
+        H: 320,
+        destructible: false,
+        destroyed: false
     };
     room4Left2 = {
         ID: "r4l2",
         X: 0,
         Y: 400,
         W: defaultBorder,
-        H: 320
+        H: 320,
+        destructible: false,
+        destroyed: false
     };
 
     //
@@ -578,18 +689,22 @@ function defineRooms () {
         X: 880,
         Y: 80,
         W: defaultBorder,
-        H: 80
+        H: 80,
+        destructible: false,
+        destroyed: false
     };
     room5Wall2 = {
         ID: "r5w1",
         X: 880,
         Y: 560,
         W: defaultBorder,
-        H: 80
+        H: 80,
+        destructible: false,
+        destroyed: false
     };
 
     // Create arrays for walls
-    room1Collision = [room1Bottom, room1Left, room1Right, room1Top1, room1Top2, room1Wall1, room1Wall2, room1Wall3, room1Wall4, room1Wall5];
+    room1Collision = [room1Bottom, room1Left, room1Right, room1Top1, room1Top2, room1Wall1, room1Wall2, room1Wall3, room1Wall4, room1Wall5, miku, dummy, r1Door, r1Obstacle];
     room2Collision = [room2Top, room2Bottom1, room2Bottom2, room2Left1, room2Left2, room2Right1, room2Right2, room2Center];
     room3Collision = [room2Top, room1Bottom, room1Left, room3Right1, room3Right2, room3Wall1, room3Wall2, room3Wall3, room3Wall4, room3Wall5];
     room4Collision = [room2Right1, room2Right2, room2Top, room1Bottom, room4Left1, room4Left2];
