@@ -97,16 +97,18 @@ function attemptInteract() {
                 r1Door.destroyed = true;
             }
             if (roomObjects[room][i].interactionID === 2) { // If it's room 3 lever 1
-                // IMPLEMENT
+                r3Door3.destroyed = !r3Door3.destroyed;
             }
             if (roomObjects[room][i].interactionID === 3) { // If it's room 3 lever 2
-                // IMPLEMENT
+                r3Door2.destroyed = !r3Door2.destroyed;
+                r3Door3.destroyed = !r3Door3.destroyed;
             }
             if (roomObjects[room][i].interactionID === 4) { // If it's room 3 lever 3
-                // IMPLEMENT
+                r3Door1.destroyed = !r3Door1.destroyed;
+                r3Door2.destroyed = !r3Door2.destroyed;
             }
             if (roomObjects[room][i].interactionID === 5) { // If it's room 3 lever 4
-                // IMPLEMENT
+                r2Door.destroyed = true;
             }
         }
     }
@@ -311,7 +313,7 @@ function init() {
     // Define game state variables
     gameStarted = false;
     lives = 3;
-    room = 0;
+    room = 2;
 
     //Initialize character sprite and sprite
     char = {
@@ -414,10 +416,203 @@ function defineRooms () {
     };
     r1Obstacle.sprite.src = "assets/game_assets/sprites/obstacle.png";
 
+    // Room 2
+    r2Door = {
+        X: 1200,
+        Y: 320,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: false,
+        destructible: false,
+        destroyed: false
+    };
+    r2Door.sprite.src = "assets/game_assets/sprites/door.png";
+
+    r2Obstacle = {
+        X: 80,
+        Y: 160,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r2Obstacle.sprite.src = "assets/game_assets/sprites/obstacle.png";
+
+    // Room 3
+    r3Door1 = {
+        X: 880,
+        Y: 560,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: false,
+        destructible: false,
+        destroyed: false
+    };
+    r3Door1.sprite.src = "assets/game_assets/sprites/door.png";
+
+    r3Door2 = {
+        X: 640,
+        Y: 560,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: false,
+        destructible: false,
+        destroyed: false
+    };
+    r3Door2.sprite.src = "assets/game_assets/sprites/door.png";
+
+    r3Door3 = {
+        X: 560,
+        Y: 480,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: false,
+        destructible: false,
+        destroyed: false
+    };
+    r3Door3.sprite.src = "assets/game_assets/sprites/door.png";
+
+    r3Lever1 = {
+        X: 1130,
+        Y: 630,
+        sprite: new Image(),
+        H: 60,
+        W: 60,
+        interactable: true,
+        interactionID: 2,
+        enemy: false,
+        destructible: false,
+        destroyed: false
+    };
+    r3Lever1.sprite.src = "assets/game_assets/sprites/lever.png";
+
+    r3Lever2 = {
+        X: 1050,
+        Y: 630,
+        sprite: new Image(),
+        H: 60,
+        W: 60,
+        interactable: true,
+        interactionID: 3,
+        enemy: false,
+        destructible: false,
+        destroyed: false
+    };
+    r3Lever2.sprite.src = "assets/game_assets/sprites/lever.png";
+
+    r3Lever3 = {
+        X: 970,
+        Y: 630,
+        sprite: new Image(),
+        H: 60,
+        W: 60,
+        interactable: true,
+        interactionID: 4,
+        enemy: false,
+        destructible: false,
+        destroyed: false
+    };
+    r3Lever3.sprite.src = "assets/game_assets/sprites/lever.png";
+
+    r3Lever4 = {
+        X: 250,
+        Y: 630,
+        sprite: new Image(),
+        H: 60,
+        W: 60,
+        interactable: true,
+        interactionID: 5,
+        enemy: false,
+        destructible: false,
+        destroyed: false
+    };
+    r3Lever4.sprite.src = "assets/game_assets/sprites/lever.png";
+
+    r3Obstacle1 = {
+        X: 800,
+        Y: 80,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r3Obstacle1.sprite.src = "assets/game_assets/sprites/obstacle.png";
+
+    r3Obstacle2 = {
+        X: 800,
+        Y: 240,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r3Obstacle2.sprite.src = "assets/game_assets/sprites/obstacle.png";
+
+    r3Obstacle3 = {
+        X: 560,
+        Y: 160,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r3Obstacle3.sprite.src = "assets/game_assets/sprites/obstacle.png";
+
+    r3Obstacle4 = {
+        X: 560,
+        Y: 240,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r3Obstacle4.sprite.src = "assets/game_assets/sprites/obstacle.png";
+
+    r3Obstacle5 = {
+        X: 640,
+        Y: 240,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r3Obstacle5.sprite.src = "assets/game_assets/sprites/obstacle.png";
 
     room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle];
-    room2Objects = [];
-    room3Objects = [];
+    room2Objects = [r2Door, r2Obstacle];
+    room3Objects = [r3Door1, r3Door2, r3Door3, r3Lever1, r3Lever2, r3Lever3, r3Lever4, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
     room4Objects = [];
     room5Objects = [];
     roomObjects = [room1Objects, room2Objects, room3Objects, room4Objects, room5Objects];
@@ -706,7 +901,7 @@ function defineRooms () {
     // Create arrays for walls
     room1Collision = [room1Bottom, room1Left, room1Right, room1Top1, room1Top2, room1Wall1, room1Wall2, room1Wall3, room1Wall4, room1Wall5, miku, dummy, r1Door, r1Obstacle];
     room2Collision = [room2Top, room2Bottom1, room2Bottom2, room2Left1, room2Left2, room2Right1, room2Right2, room2Center];
-    room3Collision = [room2Top, room1Bottom, room1Left, room3Right1, room3Right2, room3Wall1, room3Wall2, room3Wall3, room3Wall4, room3Wall5];
+    room3Collision = [room2Top, room1Bottom, room1Left, room3Right1, room3Right2, room3Wall1, room3Wall2, room3Wall3, room3Wall4, room3Wall5, r3Door1, r3Door2, r3Door3, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
     room4Collision = [room2Right1, room2Right2, room2Top, room1Bottom, room4Left1, room4Left2];
     room5Collision = [room4Left1, room4Left2, room1Bottom, room2Top, room1Right, room5Wall1, room5Wall2];
     roomsCollision = [room1Collision, room2Collision, room3Collision, room4Collision, room5Collision];
