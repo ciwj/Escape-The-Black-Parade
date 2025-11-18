@@ -25,9 +25,34 @@ function mainLoop() {
         roomsCollision[room].forEach(drawRectFromObj);
         // Draw room objects
         roomObjects[room].forEach(drawObjects);
+        drawText();
+        drawUI();
 
         // Draw player sprite
         ctx.drawImage(char.sprite, char.X, char.Y);
+    }
+}
+
+function drawUI() {
+    let tempHP = char.hp;
+    let iconNum = 0;
+
+    fullImg = new Image();
+    fullImg.src = "/assets/game_assets/sprites/fullnote_1.png";
+    halfImg = new Image();
+    halfImg.src = "/assets/game_assets/sprites/halfnote_1.png";
+
+    while (tempHP > 0) {
+        if (tempHP > 1) {
+            ctx.drawImage(fullImg, 20 + 40*iconNum, 20);
+            iconNum ++;
+            tempHP -= 2;
+        }
+        if (tempHP === 1) {
+            ctx.drawImage(halfImg, 20 + 40*iconNum, 20);
+            iconNum ++;
+            tempHP -= 1;
+        }
     }
 }
 
@@ -36,6 +61,9 @@ function drawObjects(obj) {
     if (obj.destroyed === false) {
         ctx.drawImage(obj.sprite, obj.X, obj.Y);
     }
+}
+
+function drawText() {
     if (dialogue_loc !== 0) {
         ctx.fillStyle = "black";
         ctx.fillRect(40, 20, 1200, 220);
@@ -47,12 +75,8 @@ function drawObjects(obj) {
         }
 
     }
-
 }
 
-function print_text () {
-
-}
 
 function doMovement() {
     // IMPLEMENT
