@@ -38,11 +38,19 @@ function drawObjects(obj) {
     }
     if (dialogue_loc !== 0) {
         ctx.fillStyle = "black";
-        ctx.fillRect(40, 20, 1200, 320);
+        ctx.fillRect(40, 20, 1200, 220);
 
         ctx.fillStyle = "white";
-        ctx.fillText(dialogue_text[dialogue_loc], 70, 80, 1160);
+
+        for (i = 0; i < dialogue_text[dialogue_loc].length; i++) {
+            ctx.fillText(dialogue_text[dialogue_loc][i], 70, 80 + i*60, 1160);
+        }
+
     }
+
+}
+
+function print_text () {
 
 }
 
@@ -103,7 +111,8 @@ function attemptInteract() {
                 if (verbose >= 1) {
                     console.log("initiate miku dialogue");
                 }
-                dialogue_1();
+                control = false;
+                dialogue_loc = 1;
             }
             if (roomObjects[room][i].interactionID === 1) { // If it's room 1 lever
                 // IMPLEMENT lever noise
@@ -132,12 +141,11 @@ function attemptInteract() {
         if (verbose >= 1) {
             console.log("Current dialogue location: " + dialogue_loc);
         }
+        if (dialogue_loc === 11) {
+            dialogue_loc = 0;
+            control = true;
+        }
     }
-}
-
-function dialogue_1 () {
-    control = false;
-    dialogue_loc = 1;
 }
 
 // Create an object in front of a given object with given relative width and height
@@ -376,7 +384,7 @@ function init() {
     canvas = document.getElementById("gameCanvas");
     ctx = canvas.getContext("2d");
 
-    ctx.font = "50px Helvetica";
+    ctx.font = "40px Helvetica";
 
 
     // Define game size and default wall border
@@ -414,7 +422,8 @@ function init() {
     pressAnyKey.src = "assets/game_assets/misc/pressAnyKey.png";
 
     // Define dialogue
-    dialogue_text = ["weird mystery text. how did you break the game", "you broke the game??", "oh! hi!!!", "it's me. hatsune miku."];
+    dialogue_text = [["weird mystery text. how did you break the game"], ["you broke the game??"], ["oh! hi!!! it's me. hatsune miku."], ["If the circle summoned you here then you must be the one…", "you see, there’s a problem. My evil clone has taken over", "these halls and is trying to usurp my time in the spotlight!"], [".. why do I have an evil clone?", "Why don’t you have an evil clone?", "Are you jealous?? I could make you one if you help me!"], ["Awesome!! I’m glad that’s settled - you help me,", "I help you. You’ll need to know-"], ["Yeah I know you’re confused you just got resurrected AGAIN", "that’s why I’m telling you this!!"],
+    ["Okay. You see that lever over there? Yeah!", "You can flip those with E. Levers do things."], ["This place has gotten sickeningly dangerous too - Debris blocks your way", "and my clone’s minions prowl the halls. The rose bushes have always", "been there but they definitely also hurt so watch yourself."], ["You can keep yourself safe from everything by attacking with J,", "or even send out a shockwave with K! Try it out to the left there!"], ["I guess if you perish (AGAIN) in your attempt you’ll", "just end up back here, so good luck!"], [""]];
 
     // Set interval for redrawing
     setInterval(mainLoop, 33);
