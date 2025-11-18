@@ -16,8 +16,14 @@ function mainLoop() {
     if (!gameStarted) {
         ctx.drawImage(pressAnyKey, 390, 273);
     }
+    if (char.hp === 0) {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvasSize.W, canvasSize.H);
+        ctx.fillStyle = "white";
+        ctx.fillText("Game over! Press E to try again.", 300, 360);
+    }
     // Otherwise, draw the level
-    if (gameStarted) {
+    if (gameStarted && char.hp > 0) {
         doMovement();
         handle_dmg();
         // Draw collision boxes
@@ -44,13 +50,13 @@ function drawUI() {
 
     while (tempHP > 0) {
         if (tempHP > 1) {
-            ctx.drawImage(fullImg, 20 + 40*iconNum, 20);
-            iconNum ++;
+            ctx.drawImage(fullImg, 20 + 40 * iconNum, 20);
+            iconNum++;
             tempHP -= 2;
         }
         if (tempHP === 1) {
-            ctx.drawImage(halfImg, 20 + 40*iconNum, 20);
-            iconNum ++;
+            ctx.drawImage(halfImg, 20 + 40 * iconNum, 20);
+            iconNum++;
             tempHP -= 1;
         }
     }
@@ -71,7 +77,7 @@ function drawText() {
         ctx.fillStyle = "white";
 
         for (i = 0; i < dialogue_text[dialogue_loc].length; i++) {
-            ctx.fillText(dialogue_text[dialogue_loc][i], 70, 80 + i*60, 1160);
+            ctx.fillText(dialogue_text[dialogue_loc][i], 70, 80 + i * 60, 1160);
         }
 
     }
@@ -161,11 +167,11 @@ function attemptInteract() {
 
     // Handle dialogue
     if (dialogue_loc >= 0) {
-        dialogue_loc ++;
+        dialogue_loc++;
         if (verbose >= 1) {
             console.log("Current dialogue location: " + dialogue_loc);
         }
-        if (dialogue_loc === 11) {
+        if (dialogue_loc === 11 || dialogue_loc === 1) {
             dialogue_loc = 0;
             control = true;
         }
@@ -173,7 +179,7 @@ function attemptInteract() {
 }
 
 // Create an object in front of a given object with given relative width and height
-function createBoxInFrontOf (obj, W, H, dir) {
+function createBoxInFrontOf(obj, W, H, dir) {
     let newObj = {
         X: -1,
         Y: -1,
@@ -182,23 +188,23 @@ function createBoxInFrontOf (obj, W, H, dir) {
         direction: dir
     };
     if (obj.direction === 0) {
-        newObj.X = obj.X + obj.W/2 - W/2;
+        newObj.X = obj.X + obj.W / 2 - W / 2;
         newObj.Y = obj.Y - H;
         newObj.W = W;
         newObj.H = H;
     } else if (obj.direction === 1) {
         newObj.X = obj.X + obj.W;
-        newObj.Y = obj.Y + obj.H/2 - W/2;
+        newObj.Y = obj.Y + obj.H / 2 - W / 2;
         newObj.W = H;
         newObj.H = W;
     } else if (obj.direction === 2) {
-        newObj.X = obj.X + obj.W/2 - W/2;
+        newObj.X = obj.X + obj.W / 2 - W / 2;
         newObj.Y = obj.Y + obj.H;
         newObj.W = W;
         newObj.H = H;
     } else if (obj.direction === 3) {
         newObj.X = obj.X - H;
-        newObj.Y = obj.Y + obj.H/2 - W/2;
+        newObj.Y = obj.Y + obj.H / 2 - W / 2;
         newObj.W = H;
         newObj.H = W;
     }
@@ -207,16 +213,19 @@ function createBoxInFrontOf (obj, W, H, dir) {
 
 // Keypress event function
 function KeyDown() {
-    if(verbose >= 3) {
+    if (verbose >= 3) {
         console.log(event.key);
     }
     // Start the game at the first keystroke
     if (!gameStarted) {
         gameStarted = true;
         control = true;
-    }
-    // Handle WASD movement
-    if (event.key === "d" && (!checkCollision({X: char.X + char.speed, Y: char.Y, H: char.H, W: char.W})) && control) {
+    } else if (event.key === "d" && (!checkCollision({
+        X: char.X + char.speed,
+        Y: char.Y,
+        H: char.H,
+        W: char.W
+    })) && control) {     // Handle WASD movement
         char.sprite.src = "assets/game_assets/player/playerRight.png";
         char.direction = 1;
         char.X += char.speed;
@@ -245,7 +254,18 @@ function KeyDown() {
     if (event.key === "k" && control) {
         ranged();
     }
+    if (event.key === "r" && char.hp === 0) {
+        char.hp = 5;
 
+        if (!save1Reached) {
+            room = 0;
+            char.X = 965;
+            char.Y = 245;
+        } else {
+            room = 3
+        }
+
+    }
     if (verbose >= 3) {
         console.log("X: " + char.X + " Y: " + char.Y + ".");
     }
@@ -282,7 +302,7 @@ function check_dmg(obj) {
 
     // if collide with obj, subtract health and set i-frames?
     if (checkCollBetween(charBiggerBox, obj) && !obj.destroyed) {
-        if(verbose >= 1) {
+        if (verbose >= 1) {
             console.log("dmg detected! hp:" + char.hp);
         }
         char.hp -= 1;
@@ -304,7 +324,7 @@ function check_dmg(obj) {
 }
 
 // Manage player death on 0hp
-function death_handler () {
+function death_handler() {
     // IMPLEMENT
 }
 
@@ -425,6 +445,7 @@ function init() {
     invinc_def = 30;
     control = false;
     dialogue_loc = 0;
+    save1Reached = false;
 
     //Initialize character sprite and sprite
     char = {
@@ -447,7 +468,7 @@ function init() {
 
     // Define dialogue
     dialogue_text = [["weird mystery text. how did you break the game"], ["you broke the game??"], ["oh! hi!!! it's me. hatsune miku."], ["If the circle summoned you here then you must be the one…", "you see, there’s a problem. My evil clone has taken over", "these halls and is trying to usurp my time in the spotlight!"], [".. why do I have an evil clone?", "Why don’t you have an evil clone?", "Are you jealous?? I could make you one if you help me!"], ["Awesome!! I’m glad that’s settled - you help me,", "I help you. You’ll need to know-"], ["Yeah I know you’re confused you just got resurrected AGAIN", "that’s why I’m telling you this!!"],
-    ["Okay. You see that lever over there? Yeah!", "You can flip those with E. Levers do things."], ["This place has gotten sickeningly dangerous too - Debris blocks your way", "and my clone’s minions prowl the halls. The rose bushes have always", "been there but they definitely also hurt so watch yourself."], ["You can keep yourself safe from everything by attacking with J,", "or even send out a shockwave with K! Try it out to the left there!"], ["I guess if you perish (AGAIN) in your attempt you’ll", "just end up back here, so good luck!"], [""]];
+        ["Okay. You see that lever over there? Yeah!", "You can flip those with E. Levers do things."], ["This place has gotten sickeningly dangerous too - Debris blocks your way", "and my clone’s minions prowl the halls. The rose bushes have always", "been there but they definitely also hurt so watch yourself."], ["You can keep yourself safe from everything by attacking with J,", "or even send out a shockwave with K! Try it out to the left there!"], ["I guess if you perish (AGAIN) in your attempt you’ll", "just end up back here, so good luck!"], [""]];
 
     // Set interval for redrawing
     setInterval(mainLoop, 33);
@@ -456,7 +477,7 @@ function init() {
     window.addEventListener('keydown', KeyDown);
 }
 
-function defineRooms () {
+function defineRooms() {
 
     ctx.fillStyle = "green";
 
@@ -573,7 +594,6 @@ function defineRooms () {
         destroyed: false
     };
     r1rose3.sprite.src = "assets/game_assets/sprites/roses.png";
-
 
 
     // Room 2
