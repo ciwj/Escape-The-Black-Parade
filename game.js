@@ -21,6 +21,7 @@ function mainLoop() {
         doMovement();
         handle_dmg();
         // Draw collision boxes
+        ctx.fillStyle = "green";
         roomsCollision[room].forEach(drawRectFromObj);
         // Draw room objects
         roomObjects[room].forEach(drawObjects);
@@ -35,6 +36,14 @@ function drawObjects(obj) {
     if (obj.destroyed === false) {
         ctx.drawImage(obj.sprite, obj.X, obj.Y);
     }
+    if (dialogue_loc !== 0) {
+        ctx.fillStyle = "black";
+        ctx.fillRect(40, 20, 1200, 320);
+
+        ctx.fillStyle = "white";
+        ctx.fillText(dialogue_text[dialogue_loc], 70, 80, 1160);
+    }
+
 }
 
 function doMovement() {
@@ -90,8 +99,11 @@ function attemptInteract() {
         }
 
         if (checkCollBetween(boxToCheck, roomObjects[room][i]) && roomObjects[room][i].interactable) {
-            if (roomObjects[room][i].interactionID === 0) { // If it's room 1 miku
-                // IMPLEMENT
+            if (roomObjects[room][i].interactionID === 0 && control) { // If it's room 1 miku
+                if (verbose >= 1) {
+                    console.log("initiate miku dialogue");
+                }
+                dialogue_1();
             }
             if (roomObjects[room][i].interactionID === 1) { // If it's room 1 lever
                 // IMPLEMENT lever noise
@@ -113,6 +125,19 @@ function attemptInteract() {
             }
         }
     }
+
+    // Handle dialogue
+    if (dialogue_loc >= 0) {
+        dialogue_loc ++;
+        if (verbose >= 1) {
+            console.log("Current dialogue location: " + dialogue_loc);
+        }
+    }
+}
+
+function dialogue_1 () {
+    control = false;
+    dialogue_loc = 1;
 }
 
 // Create an object in front of a given object with given relative width and height
@@ -150,30 +175,31 @@ function createBoxInFrontOf (obj, W, H, dir) {
 
 // Keypress event function
 function KeyDown() {
-    if(verbose >= 2) {
+    if(verbose >= 3) {
         console.log(event.key);
     }
     // Start the game at the first keystroke
     if (!gameStarted) {
         gameStarted = true;
+        control = true;
     }
     // Handle WASD movement
-    if (event.key === "d" && (!checkCollision({X: char.X + char.speed, Y: char.Y, H: char.H, W: char.W}))) {
+    if (event.key === "d" && (!checkCollision({X: char.X + char.speed, Y: char.Y, H: char.H, W: char.W})) && control) {
         char.sprite.src = "assets/game_assets/player/playerRight.png";
         char.direction = 1;
         char.X += char.speed;
     }
-    if (event.key === "a" && (!checkCollision({X: char.X - char.speed, Y: char.Y, H: char.H, W: char.W}))) {
+    if (event.key === "a" && (!checkCollision({X: char.X - char.speed, Y: char.Y, H: char.H, W: char.W})) && control) {
         char.sprite.src = "assets/game_assets/player/playerLeft.png";
         char.direction = 3;
         char.X -= char.speed;
     }
-    if (event.key === "w" && (!checkCollision({X: char.X, Y: char.Y - char.speed, H: char.H, W: char.W}))) {
+    if (event.key === "w" && (!checkCollision({X: char.X, Y: char.Y - char.speed, H: char.H, W: char.W})) && control) {
         char.sprite.src = "assets/game_assets/player/playerUp.png";
         char.direction = 0;
         char.Y -= char.speed;
     }
-    if (event.key === "s" && (!checkCollision({X: char.X, Y: char.Y + char.speed, H: char.H, W: char.W}))) {
+    if (event.key === "s" && (!checkCollision({X: char.X, Y: char.Y + char.speed, H: char.H, W: char.W})) && control) {
         char.sprite.src = "assets/game_assets/player/playerDown.png";
         char.direction = 2;
         char.Y += char.speed;
@@ -181,10 +207,10 @@ function KeyDown() {
     if (event.key === "e") {
         attemptInteract();
     }
-    if (event.key === "j") {
+    if (event.key === "j" && control) {
         melee();
     }
-    if (event.key === "k") {
+    if (event.key === "k" && control) {
         ranged();
     }
 
@@ -350,6 +376,8 @@ function init() {
     canvas = document.getElementById("gameCanvas");
     ctx = canvas.getContext("2d");
 
+    ctx.font = "50px Helvetica";
+
 
     // Define game size and default wall border
     canvasSize = {
@@ -363,6 +391,8 @@ function init() {
     room = 0;
     invincible = 0;
     invinc_def = 30;
+    control = false;
+    dialogue_loc = 0;
 
     //Initialize character sprite and sprite
     char = {
@@ -382,6 +412,9 @@ function init() {
     // Define starting UI
     pressAnyKey = new Image();
     pressAnyKey.src = "assets/game_assets/misc/pressAnyKey.png";
+
+    // Define dialogue
+    dialogue_text = ["weird mystery text. how did you break the game", "you broke the game??", "oh! hi!!!", "it's me. hatsune miku."];
 
     // Set interval for redrawing
     setInterval(mainLoop, 33);
