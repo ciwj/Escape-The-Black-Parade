@@ -19,6 +19,7 @@ function mainLoop() {
     // Otherwise, draw the level
     if (gameStarted) {
         doMovement();
+        handle_dmg();
         // Draw collision boxes
         roomsCollision[room].forEach(drawRectFromObj);
         // Draw room objects
@@ -77,12 +78,12 @@ function drawRectFromObj(rectObj) {
 // Runs when E is pressed
 function attemptInteract() {
     if (verbose >= 1) {
-        drawRectFromObj(createBoxInFrontOf(char, 50, 50));
+        drawRectFromObj(createBoxInFrontOf(char, 50, 50, char.direction));
     }
     // Iterate through the current room's objects
     for (i = 0; i < roomObjects[room].length; i++) {
         // Create a box in front of the player to compare to object distance
-        let boxToCheck = createBoxInFrontOf(char, 50, 50);
+        let boxToCheck = createBoxInFrontOf(char, 50, 50, char.direction);
 
         if (verbose >= 1) {
             console.log("Interaction distance check:" + checkCollBetween(boxToCheck, roomObjects[room][i]) + " Interactable: " + roomObjects[room][i].interactable);
@@ -115,13 +116,13 @@ function attemptInteract() {
 }
 
 // Create an object in front of a given object with given relative width and height
-function createBoxInFrontOf (obj, W, H) {
+function createBoxInFrontOf (obj, W, H, dir) {
     let newObj = {
         X: -1,
         Y: -1,
         W: -1,
         H: -1,
-        direction: obj.direction
+        direction: dir
     };
     if (obj.direction === 0) {
         newObj.X = obj.X + obj.W/2 - W/2;
@@ -187,7 +188,7 @@ function KeyDown() {
         ranged();
     }
 
-    if (verbose >= 2) {
+    if (verbose >= 3) {
         console.log("X: " + char.X + " Y: " + char.Y + ".");
     }
     changeRoom();
@@ -202,15 +203,62 @@ function heal() {
     // IMPLEMENT
 }
 
+function handle_dmg() {
+    if (invincible > 0) { // count i-frames
+        invincible--;
+    } else if (invincible === 0) { // if no iframes, check for dmg
+        roomsdmgable[room].forEach(check_dmg);
+    }
+
+}
+
+function check_dmg(obj) {
+    // create thin box in every direction of
+    let dmg_margin = 5;
+    let charBiggerBox = {
+        X: char.X - dmg_margin,
+        Y: char.Y - dmg_margin,
+        H: char.H + dmg_margin * 2,
+        W: char.W + dmg_margin * 2
+    }
+
+    // if collide with obj, subtract health and set i-frames?
+    if (checkCollBetween(charBiggerBox, obj) && !obj.destroyed) {
+        if(verbose >= 1) {
+            console.log("dmg detected! hp:" + char.hp);
+        }
+        char.hp -= 1;
+        invincible = invinc_def;
+        if (char.direction === 0) {
+            char.Y += char.speed * 4;
+        } else if (char.direction === 1) {
+            char.X -= char.speed * 4;
+        } else if (char.direction === 2) {
+            char.Y -= char.speed * 4;
+        } else if (char.direction === 3) {
+            char.X += char.speed * 4;
+        }
+    }
+
+    if (char.hp <= 0) {
+        death_handler();
+    }
+}
+
+// Manage player death on 0hp
+function death_handler () {
+    // IMPLEMENT
+}
+
 // Melee attack
 function melee() {
     if (verbose >= 1) {
-        drawRectFromObj(createBoxInFrontOf(char, 90, 50));
+        drawRectFromObj(createBoxInFrontOf(char, 90, 50, char.direction));
     }
 
     for (i = 0; i < roomObjects[room].length; i++) {
         // Create a box in front of the player to compare to object distance
-        let boxToCheck = createBoxInFrontOf(char, 90, 50);
+        let boxToCheck = createBoxInFrontOf(char, 90, 50, char.direction);
 
         if (verbose >= 1) {
             console.log("Interaction distance check:" + checkCollBetween(boxToCheck, roomObjects[room][i]));
@@ -312,8 +360,9 @@ function init() {
 
     // Define game state variables
     gameStarted = false;
-    lives = 3;
-    room = 2;
+    room = 0;
+    invincible = 0;
+    invinc_def = 30;
 
     //Initialize character sprite and sprite
     char = {
@@ -323,6 +372,7 @@ function init() {
         H: 70,
         W: 70,
         speed: 5,
+        hp: 5,
         direction: 2 // 0-Up 1-Right 2-Down 3-Left
     };
     char.sprite.src = "assets/game_assets/player/playerDown.png";
@@ -415,6 +465,50 @@ function defineRooms () {
         destroyed: false
     };
     r1Obstacle.sprite.src = "assets/game_assets/sprites/obstacle.png";
+
+    r1rose1 = {
+        X: 240,
+        Y: 400,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r1rose1.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r1rose2 = {
+        X: 240,
+        Y: 480,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r1rose2.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r1rose3 = {
+        X: 240,
+        Y: 560,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r1rose3.sprite.src = "assets/game_assets/sprites/roses.png";
+
+
 
     // Room 2
     r2Door = {
@@ -610,12 +704,19 @@ function defineRooms () {
     };
     r3Obstacle5.sprite.src = "assets/game_assets/sprites/obstacle.png";
 
-    room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle];
+    room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle, r1rose1, r1rose2, r1rose3];
     room2Objects = [r2Door, r2Obstacle];
     room3Objects = [r3Door1, r3Door2, r3Door3, r3Lever1, r3Lever2, r3Lever3, r3Lever4, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
     room4Objects = [];
     room5Objects = [];
     roomObjects = [room1Objects, room2Objects, room3Objects, room4Objects, room5Objects];
+
+    room1dmgable = [r1rose1, r1rose2, r1rose3];
+    room2dmgable = [];
+    room3dmgable = [];
+    room4dmgable = [];
+    room5dmgable = [];
+    roomsdmgable = [room1dmgable, room2dmgable, room3dmgable, room4dmgable, room5dmgable];
 
     //
     // Define collision boxes for room 1
@@ -899,7 +1000,7 @@ function defineRooms () {
     };
 
     // Create arrays for walls
-    room1Collision = [room1Bottom, room1Left, room1Right, room1Top1, room1Top2, room1Wall1, room1Wall2, room1Wall3, room1Wall4, room1Wall5, miku, dummy, r1Door, r1Obstacle];
+    room1Collision = [room1Bottom, room1Left, room1Right, room1Top1, room1Top2, room1Wall1, room1Wall2, room1Wall3, room1Wall4, room1Wall5, miku, dummy, r1Door, r1Obstacle, r1rose1, r1rose2, r1rose3];
     room2Collision = [room2Top, room2Bottom1, room2Bottom2, room2Left1, room2Left2, room2Right1, room2Right2, room2Center];
     room3Collision = [room2Top, room1Bottom, room1Left, room3Right1, room3Right2, room3Wall1, room3Wall2, room3Wall3, room3Wall4, room3Wall5, r3Door1, r3Door2, r3Door3, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
     room4Collision = [room2Right1, room2Right2, room2Top, room1Bottom, room4Left1, room4Left2];
