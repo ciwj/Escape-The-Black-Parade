@@ -318,14 +318,6 @@ function check_dmg(obj) {
         }
     }
 
-    if (char.hp <= 0) {
-        death_handler();
-    }
-}
-
-// Manage player death on 0hp
-function death_handler() {
-    // IMPLEMENT
 }
 
 // Melee attack
@@ -477,6 +469,7 @@ function init() {
     window.addEventListener('keydown', KeyDown);
 }
 
+
 function defineRooms() {
 
     ctx.fillStyle = "green";
@@ -624,7 +617,105 @@ function defineRooms() {
     };
     r2Obstacle.sprite.src = "assets/game_assets/sprites/obstacle.png";
 
+    r2rose1 = {
+        X: 1040,
+        Y: 80,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r2rose1.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r2rose2 = {
+        X: 1040,
+        Y: 560,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r2rose2.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r2rose3 = {
+        X: 1120,
+        Y: 80,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r2rose3.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r2rose4 = {
+        X: 1120,
+        Y: 160,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r2rose4.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r2rose5 = {
+        X: 1120,
+        Y: 480,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r2rose5.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r2rose6 = {
+        X: 1120,
+        Y: 560,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r2rose6.sprite.src = "assets/game_assets/sprites/roses.png";
+
     // Room 3
+    r3rose = {
+        X: 560,
+        Y: 320,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r3rose.sprite.src = "assets/game_assets/sprites/roses.png";
+
     r3Door1 = {
         X: 880,
         Y: 560,
@@ -791,15 +882,15 @@ function defineRooms() {
     r3Obstacle5.sprite.src = "assets/game_assets/sprites/obstacle.png";
 
     room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle, r1rose1, r1rose2, r1rose3];
-    room2Objects = [r2Door, r2Obstacle];
-    room3Objects = [r3Door1, r3Door2, r3Door3, r3Lever1, r3Lever2, r3Lever3, r3Lever4, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
+    room2Objects = [r2Door, r2Obstacle, r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6];
+    room3Objects = [r3rose, r3Door1, r3Door2, r3Door3, r3Lever1, r3Lever2, r3Lever3, r3Lever4, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
     room4Objects = [];
     room5Objects = [];
     roomObjects = [room1Objects, room2Objects, room3Objects, room4Objects, room5Objects];
 
     room1dmgable = [r1rose1, r1rose2, r1rose3];
-    room2dmgable = [];
-    room3dmgable = [];
+    room2dmgable = [r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6];
+    room3dmgable = [r3rose];
     room4dmgable = [];
     room5dmgable = [];
     roomsdmgable = [room1dmgable, room2dmgable, room3dmgable, room4dmgable, room5dmgable];
@@ -1087,9 +1178,74 @@ function defineRooms() {
 
     // Create arrays for walls
     room1Collision = [room1Bottom, room1Left, room1Right, room1Top1, room1Top2, room1Wall1, room1Wall2, room1Wall3, room1Wall4, room1Wall5, miku, dummy, r1Door, r1Obstacle, r1rose1, r1rose2, r1rose3];
-    room2Collision = [room2Top, room2Bottom1, room2Bottom2, room2Left1, room2Left2, room2Right1, room2Right2, room2Center];
-    room3Collision = [room2Top, room1Bottom, room1Left, room3Right1, room3Right2, room3Wall1, room3Wall2, room3Wall3, room3Wall4, room3Wall5, r3Door1, r3Door2, r3Door3, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
+    room2Collision = [room2Top, room2Bottom1, room2Bottom2, room2Left1, room2Left2, room2Right1, room2Right2, room2Center, r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6];
+    room3Collision = [r3rose, room2Top, room1Bottom, room1Left, room3Right1, room3Right2, room3Wall1, room3Wall2, room3Wall3, room3Wall4, room3Wall5, r3Door1, r3Door2, r3Door3, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
     room4Collision = [room2Right1, room2Right2, room2Top, room1Bottom, room4Left1, room4Left2];
     room5Collision = [room4Left1, room4Left2, room1Bottom, room2Top, room1Right, room5Wall1, room5Wall2];
     roomsCollision = [room1Collision, room2Collision, room3Collision, room4Collision, room5Collision];
+
+    for (i = 1; i < 15; i++) {
+        roseObj1 = {
+            X: i * 80,
+            Y: 80,
+            sprite: new Image(),
+            H: 80,
+            W: 80,
+            interactable: false,
+            enemy: true,
+            destructible: true,
+            hp: 1,
+            destroyed: false
+        };
+        roseObj1.sprite.src = "assets/game_assets/sprites/roses.png";
+        roseObj2 = {
+            X: i * 80,
+            Y: 560,
+            sprite: new Image(),
+            H: 80,
+            W: 80,
+            interactable: false,
+            enemy: true,
+            destructible: true,
+            hp: 1,
+            destroyed: false
+        };
+        roseObj2.sprite.src = "assets/game_assets/sprites/roses.png";
+        room4Objects.push(roseObj1, roseObj2);
+        room4Collision.push(roseObj1, roseObj2);
+        room4dmgable.push(roseObj1, roseObj2);
+    }
+
+    for (i = 1; i < 11; i++) {
+        roseObj1 = {
+            X: i * 80,
+            Y: 80,
+            sprite: new Image(),
+            H: 80,
+            W: 80,
+            interactable: false,
+            enemy: true,
+            destructible: true,
+            hp: 1,
+            destroyed: false
+        };
+        roseObj1.sprite.src = "assets/game_assets/sprites/roses.png";
+        roseObj2 = {
+            X: i * 80,
+            Y: 560,
+            sprite: new Image(),
+            H: 80,
+            W: 80,
+            interactable: false,
+            enemy: true,
+            destructible: true,
+            hp: 1,
+            destroyed: false
+        };
+        roseObj2.sprite.src = "assets/game_assets/sprites/roses.png";
+
+        room5Objects.push(roseObj1, roseObj2);
+        room5Collision.push(roseObj1, roseObj2);
+        room5dmgable.push(roseObj1, roseObj2);
+    }
 }
