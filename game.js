@@ -283,6 +283,9 @@ function heal() {
 
 function handle_dmg() {
     if (invincible > 0) { // count i-frames
+        if (invincible === 1) {
+            char.sprite.src = dmgSpriteTemp;
+        }
         invincible--;
     } else if (invincible === 0) { // if no iframes, check for dmg
         roomsdmgable[room].forEach(check_dmg);
@@ -307,14 +310,19 @@ function check_dmg(obj) {
         }
         char.hp -= 1;
         invincible = invinc_def;
+        dmgSpriteTemp = char.sprite.src;
         if (char.direction === 0) {
             char.Y += char.speed * 4;
+            char.sprite.src = "assets/game_assets/player/PlayerUp_Hurt.png";
         } else if (char.direction === 1) {
             char.X -= char.speed * 4;
+            char.sprite.src = "assets/game_assets/player/PlayerRight_Hurt.png";
         } else if (char.direction === 2) {
             char.Y -= char.speed * 4;
+            char.sprite.src = "assets/game_assets/player/PlayerBack_Hurt.png";
         } else if (char.direction === 3) {
             char.X += char.speed * 4;
+            char.sprite.src = "assets/game_assets/player/PlayerLeft_Hurt.png";
         }
     }
 
