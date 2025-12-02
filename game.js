@@ -145,22 +145,61 @@ function attemptInteract() {
                 dialogue_loc = 1;
             }
             if (roomObjects[room][i].interactionID === 1) { // If it's room 1 lever
-                // IMPLEMENT lever noise
-                r1Door.destroyed = true;
+                if (!roomObjects[room][i].flipped) {
+                    r1Door.destroyed = true;
+                    roomObjects[room][i].flipped = true;
+                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_right.png";
+                    leverSound.play();
+                } else {
+                    //r1Door.destroyed = false;
+                    //roomObjects[room][i].flipped = false;
+                    //roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_left.png";
+                }
+
             }
             if (roomObjects[room][i].interactionID === 2) { // If it's room 3 lever 1
+                if (!roomObjects[room][i].flipped) {
+                    roomObjects[room][i].flipped = true;
+                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_right.png";
+
+                } else {
+                    roomObjects[room][i].flipped = false;
+                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_left.png";
+                }
                 r3Door3.destroyed = !r3Door3.destroyed;
+                leverSound.play();
             }
             if (roomObjects[room][i].interactionID === 3) { // If it's room 3 lever 2
+                if (!roomObjects[room][i].flipped) {
+                    roomObjects[room][i].flipped = true;
+                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_right.png";
+                } else {
+                    roomObjects[room][i].flipped = false;
+                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_left.png";
+                }
                 r3Door2.destroyed = !r3Door2.destroyed;
                 r3Door3.destroyed = !r3Door3.destroyed;
+                leverSound.play();
             }
             if (roomObjects[room][i].interactionID === 4) { // If it's room 3 lever 3
+                if (!roomObjects[room][i].flipped) {
+                    roomObjects[room][i].flipped = true;
+                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_right.png";
+                } else {
+                    roomObjects[room][i].flipped = false;
+                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_left.png";
+                }
                 r3Door1.destroyed = !r3Door1.destroyed;
                 r3Door2.destroyed = !r3Door2.destroyed;
+                leverSound.play();
             }
             if (roomObjects[room][i].interactionID === 5) { // If it's room 3 lever 4
+                if (!roomObjects[room][i].flipped) {
+                    roomObjects[room][i].flipped = true;
+                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_right.png";
+                }
                 r2Door.destroyed = true;
+                leverSound.play();
             }
         }
     }
@@ -220,6 +259,7 @@ function KeyDown() {
     if (!gameStarted) {
         gameStarted = true;
         control = true;
+        spawnSound.play();
     } else if (event.key === "d" && (!checkCollision({
         X: char.X + char.speed,
         Y: char.Y,
@@ -335,6 +375,7 @@ function melee() {
     }
 
     for (i = 0; i < roomObjects[room].length; i++) {
+
         // Create a box in front of the player to compare to object distance
         let boxToCheck = createBoxInFrontOf(char, 90, 50, char.direction);
 
@@ -430,6 +471,10 @@ function init() {
 
     ctx.font = "40px Helvetica";
 
+    // Define sounds
+    leverSound = new Audio('assets/game_assets/misc/lever.mp3');
+    spawnSound = new Audio('assets/game_assets/misc/spawn.mp3');
+
 
     // Define game size and default wall border
     canvasSize = {
@@ -497,7 +542,7 @@ function defineRooms() {
         destructible: false,
         destroyed: false
     };
-    miku.sprite.src = "assets/game_assets/non_player/miku.png";
+    miku.sprite.src = "assets/game_assets/sprites/npc.png";
 
     dummy = {
         X: 85,
@@ -536,9 +581,10 @@ function defineRooms() {
         interactionID: 1,
         enemy: false,
         destructible: false,
-        destroyed: false
+        destroyed: false,
+        flipped: false
     };
-    r1Lever.sprite.src = "assets/game_assets/sprites/lever.png";
+    r1Lever.sprite.src = "assets/game_assets/sprites/lever_left.png";
 
     r1Obstacle = {
         X: 320,
@@ -773,9 +819,10 @@ function defineRooms() {
         interactionID: 2,
         enemy: false,
         destructible: false,
-        destroyed: false
+        destroyed: false,
+        flipped: false
     };
-    r3Lever1.sprite.src = "assets/game_assets/sprites/lever.png";
+    r3Lever1.sprite.src = "assets/game_assets/sprites/lever_left.png";
 
     r3Lever2 = {
         X: 1050,
@@ -787,9 +834,10 @@ function defineRooms() {
         interactionID: 3,
         enemy: false,
         destructible: false,
-        destroyed: false
+        destroyed: false,
+        flipped: false
     };
-    r3Lever2.sprite.src = "assets/game_assets/sprites/lever.png";
+    r3Lever2.sprite.src = "assets/game_assets/sprites/lever_left.png";
 
     r3Lever3 = {
         X: 970,
@@ -801,9 +849,10 @@ function defineRooms() {
         interactionID: 4,
         enemy: false,
         destructible: false,
-        destroyed: false
+        destroyed: false,
+        flipped: false
     };
-    r3Lever3.sprite.src = "assets/game_assets/sprites/lever.png";
+    r3Lever3.sprite.src = "assets/game_assets/sprites/lever_left.png";
 
     r3Lever4 = {
         X: 250,
@@ -817,7 +866,7 @@ function defineRooms() {
         destructible: false,
         destroyed: false
     };
-    r3Lever4.sprite.src = "assets/game_assets/sprites/lever.png";
+    r3Lever4.sprite.src = "assets/game_assets/sprites/lever_left.png";
 
     r3Obstacle1 = {
         X: 800,
