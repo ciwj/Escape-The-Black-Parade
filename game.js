@@ -1,7 +1,7 @@
 // Game code
 
 // Define logging level
-verbose = 2; // 0 - no console logging, 1 - basic console logging, 2 - some console logging, 3 - log everything
+verbose = 0; // 0 - no console logging, 1 - basic console logging, 2 - some console logging, 3 - log everything
 
 // Run game initialization
 init()
@@ -24,6 +24,7 @@ function mainLoop() {
     }
     // Otherwise, draw the level
     if (gameStarted && char.hp > 0) {
+        handle_animation();
         doMovement();
         handle_dmg();
         // Draw collision boxes
@@ -368,6 +369,27 @@ function check_dmg(obj) {
 
 }
 
+// Attack frame animations
+function handle_animation() {
+    if (charAttackFrame !== 0) {
+        charAttackFrame++;
+        if (charAttackFrame <= 11) {
+            char.sprite.src = char.sprite.src = `assets/game_assets/player/melee/frame${charAttackFrame}.png`;
+        } else {
+            if (char.direction === 0) {
+                char.sprite.src = "assets/game_assets/player/playerUp.png";
+            } else if (char.direction === 1) {
+                char.sprite.src = "assets/game_assets/player/playerRight.png";
+            } else if (char.direction === 2) {
+                char.sprite.src = "assets/game_assets/player/playerDown.png";
+            } else if (char.direction === 3) {
+                char.sprite.src = "assets/game_assets/player/playerLeft.png";
+            }
+        }
+    }
+
+}
+
 // Melee attack
 function melee() {
     if (verbose >= 1) {
@@ -393,6 +415,8 @@ function melee() {
             }
         }
     }
+    charAttackFrame = 1;
+    char.sprite.src = `assets/game_assets/player/melee/frame${charAttackFrame}.png`;
 }
 
 // Check for collision between any two objects
@@ -504,6 +528,10 @@ function init() {
         direction: 2 // 0-Up 1-Right 2-Down 3-Left
     };
     char.sprite.src = "assets/game_assets/player/playerDown.png";
+
+    dmgSpriteTemp = new Image();
+
+    charAttackFrame = 0;
 
     defineRooms()
 
