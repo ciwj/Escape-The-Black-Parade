@@ -31,6 +31,7 @@ function mainLoop() {
         ctx.fillStyle = "green";
         roomsCollision[room].forEach(drawRectFromObj);
         // Draw room objects
+        ctx.drawImage(roomAsset, 0, 0);
         roomObjects[room].forEach(drawObjects);
         drawText();
         drawUI();
@@ -113,7 +114,7 @@ function changeRoom() {
         room = 4;
         char.X = 5;
     }
-
+    roomAsset.src = `assets/game_assets/rooms/room${room}.png`;
 }
 
 // Helper f'n to draw a rectangle from a literal
@@ -367,6 +368,9 @@ function check_dmg(obj) {
         }
     }
 
+    if (char.hp === 0) {
+        gameOverSound.play();
+    }
 }
 
 // Attack frame animations
@@ -498,6 +502,7 @@ function init() {
     // Define sounds
     leverSound = new Audio('assets/game_assets/misc/lever.mp3');
     spawnSound = new Audio('assets/game_assets/misc/spawn.mp3');
+    gameOverSound = new Audio('assets/game_assets/misc/game_over.mp3');
 
 
     // Define game size and default wall border
@@ -506,6 +511,9 @@ function init() {
         H: 720
     };
     defaultBorder = 80;
+
+    roomAsset = new Image();
+    roomAsset.src = "assets/game_assets/rooms/room0";
 
     // Define game state variables
     gameStarted = false;
