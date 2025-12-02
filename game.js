@@ -17,24 +17,24 @@ function mainLoop() {
         ctx.drawImage(pressAnyKey, 390, 273);
     }
     if (char.hp === 0) {
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, canvasSize.W, canvasSize.H);
-        ctx.fillStyle = "white";
-        ctx.fillText("Game over! Press E to try again.", 300, 360);
+        ctx.drawImage(gameOverImg, 0, 0);
     }
     // Otherwise, draw the level
     if (gameStarted && char.hp > 0) {
+        ctx.drawImage(roomAsset, 0, 0);
+
         handle_animation();
         doMovement();
         handle_dmg();
+        heal();
         // Draw collision boxes
-        ctx.fillStyle = "green";
-        roomsCollision[room].forEach(drawRectFromObj);
+            //ctx.fillStyle = "green";
+            //roomsCollision[room].forEach(drawRectFromObj);
         // Draw room objects
-        ctx.drawImage(roomAsset, 0, 0);
+
         roomObjects[room].forEach(drawObjects);
-        drawText();
         drawUI();
+        drawText();
 
         // Draw player sprite
         ctx.drawImage(char.sprite, char.X, char.Y);
@@ -324,7 +324,13 @@ function ranged() {
 }
 
 function heal() {
-    // IMPLEMENT
+    if (room === 3 && checkCollBetween(r4Heal, char)) {
+        r4Heal.destroyed = true;
+        char.hp = 5;
+    } else if (room === 0 && checkCollBetween(r1Heal, char)) {
+        r1Heal.destroyed = true;
+        char.hp = 5;
+    }
 }
 
 function handle_dmg() {
@@ -503,6 +509,9 @@ function init() {
 
     ctx.font = "40px Helvetica";
 
+    gameOverImg = new Image();
+    gameOverImg.src = "assets/game_assets/misc/gameover.png";
+
     // Define sounds
     leverSound = new Audio('assets/game_assets/misc/lever.mp3');
     spawnSound = new Audio('assets/game_assets/misc/spawn.mp3');
@@ -545,7 +554,7 @@ function init() {
 
     charAttackFrame = 0;
 
-    defineRooms()
+    defineRooms();
 
     // Define starting UI
     pressAnyKey = new Image();
@@ -681,6 +690,19 @@ function defineRooms() {
         destroyed: false
     };
     r1rose3.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r1Heal = {
+        X: 485,
+        Y: 165,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: false,
+        destructible: true,
+        destroyed: false
+    };
+    r1Heal.sprite.src = "assets/game_assets/sprites/hearticon.png";
 
 
     // Room 2
@@ -978,10 +1000,23 @@ function defineRooms() {
     };
     r3Obstacle5.sprite.src = "assets/game_assets/sprites/obstacle.png";
 
-    room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle, r1rose1, r1rose2, r1rose3];
+    r4Heal = {
+        X: 1125,
+        Y: 325,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: false,
+        destructible: true,
+        destroyed: false
+    };
+    r4Heal.sprite.src = "assets/game_assets/sprites/hearticon.png";
+
+    room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle, r1rose1, r1rose2, r1rose3, r1Heal];
     room2Objects = [r2Door, r2Obstacle, r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6];
     room3Objects = [r3rose, r3Door1, r3Door2, r3Door3, r3Lever1, r3Lever2, r3Lever3, r3Lever4, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
-    room4Objects = [];
+    room4Objects = [r4Heal];
     room5Objects = [];
     roomObjects = [room1Objects, room2Objects, room3Objects, room4Objects, room5Objects];
 
