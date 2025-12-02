@@ -43,22 +43,26 @@ function mainLoop() {
 
 function drawUI() {
     let tempHP = char.hp;
-    let iconNum = 0;
+    let drawCorner = 980;
 
-    fullImg = new Image();
-    fullImg.src = "/assets/game_assets/sprites/fullnote_1.png";
-    halfImg = new Image();
-    halfImg.src = "/assets/game_assets/sprites/halfnote_1.png";
+    let heartIcon = new Image();
+    heartIcon.src = "assets/game_assets/sprites/hearticon.png";
+    ctx.drawImage(heartIcon, drawCorner, 5);
+    drawCorner += 120;
+
+    let fullImg = new Image();
+    fullImg.src = "/assets/game_assets/sprites/fullnote.png";
+    let halfImg = new Image();
+    halfImg.src = "/assets/game_assets/sprites/halfnote.png";
 
     while (tempHP > 0) {
         if (tempHP > 1) {
-            ctx.drawImage(fullImg, 20 + 40 * iconNum, 20);
-            iconNum++;
+            ctx.drawImage(fullImg, drawCorner, 5);
+            drawCorner += 65;
             tempHP -= 2;
         }
         if (tempHP === 1) {
-            ctx.drawImage(halfImg, 20 + 40 * iconNum, 20);
-            iconNum++;
+            ctx.drawImage(halfImg, drawCorner, 5);
             tempHP -= 1;
         }
     }
