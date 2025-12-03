@@ -50,9 +50,30 @@ function check_savepoint() {
 }
 
 function handle_boss() {
-    if (room === 4 && char.X > 160) {
+    if (!bossFight && room === 4 && char.X > 160) { // Start boss sequence
         bossFight = true;
+        r5Obstacle.destroyed = false;
+        bossStartSound.play();
+        normalBGMusic.pause();
+        control = false;
+        mikuMoveInterval = setInterval(mikuEnters, 15);
+    } else if (mikuInPlace) { // Once Miku is in place
+        clearInterval(mikuMoveInterval);
     }
+}
+
+function mikuEnters() {
+    if (bossMiku.Y < 200) {
+        bossMiku.Y += 5;
+        if(verbose > 1) {
+            console.log(`Miku is at ${bossMiku.Y}`);
+        }
+
+    } else {
+        laughSound.play();
+        mikuInPlace = true;
+    }
+
 }
 
 function drawUI() {
@@ -120,23 +141,23 @@ function doMovement() {
                 let noD = false;
 
                 // If it's near the edge of the range, change the direction
-                if (movingObj.rangeL + 10 > movingObj.X) {
+                if (movingObj.rangeL + 2 * movingObj.speed > movingObj.X) {
                     noL = true;
                     changeDir = true;
-                } else if (movingObj.rangeR - 10 < movingObj.X) {
+                } else if (movingObj.rangeR - 2 * movingObj.speed < movingObj.X) {
                     noR = true;
                     changeDir = true;
-                } else if (movingObj.rangeU + 10 > movingObj.Y) {
+                } else if (movingObj.rangeU + 2 * movingObj.speed > movingObj.Y) {
                     noU = true;
                     changeDir = true;
-                } else if (movingObj.rangeD - 10 < movingObj.Y) {
+                } else if (movingObj.rangeD - 2 * movingObj.speed < movingObj.Y) {
                     noD = true;
                     changeDir = true;
                 }
 
                 if (verbose > 2) {
-                    console.log(`RangeL: ${movingObj.rangeL + 10 < movingObj.X} RangeR: ${movingObj.rangeR - 10 > movingObj.X} RangeU: ${movingObj.rangeU + 10 < movingObj.Y} RangeD: ${movingObj.rangeD - 10 > movingObj.Y}`);
-                    console.log(`X/Y: ${movingObj.X} ${movingObj.Y} RangeL: ${movingObj.rangeL + 10} RangeR: ${movingObj.rangeR - 10} RangeU: ${movingObj.rangeU + 10} RangeD: ${movingObj.rangeD - 10}`);
+                    console.log(`RangeL: ${movingObj.rangeL + 2 * movingObj.speed < movingObj.X} RangeR: ${movingObj.rangeR - 2 * movingObj.speed > movingObj.X} RangeU: ${movingObj.rangeU + 2 * movingObj.speed < movingObj.Y} RangeD: ${movingObj.rangeD - 2 * movingObj.speed > movingObj.Y}`);
+                    console.log(`X/Y: ${movingObj.X} ${movingObj.Y} RangeL: ${movingObj.rangeL + 2 * movingObj.speed} RangeR: ${movingObj.rangeR - 2 * movingObj.speed} RangeU: ${movingObj.rangeU + 2 * movingObj.speed} RangeD: ${movingObj.rangeD - 2 * movingObj.speed}`);
                 }
 
                 // Run X% chance of changing direction anyway
@@ -163,16 +184,16 @@ function doMovement() {
 
                     switch (randomDir) {
                         case 0:
-                            movingObj.sprite.src = "assets/game_assets/non_player/ClownUp.png";
+                            movingObj.sprite.src = `assets/game_assets/non_player/${movingObj.type}Up.png`;
                             break;
                         case 1:
-                            movingObj.sprite.src = "assets/game_assets/non_player/ClownRight.png";
+                            movingObj.sprite.src = `assets/game_assets/non_player/${movingObj.type}Right.png`;
                             break;
                         case 2:
-                            movingObj.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+                            movingObj.sprite.src = `assets/game_assets/non_player/${movingObj.type}Down.png`;
                             break;
                         case 3:
-                            movingObj.sprite.src = "assets/game_assets/non_player/ClownLeft.png";
+                            movingObj.sprite.src = `assets/game_assets/non_player/${movingObj.type}Left.png`;
                             break;
                     }
 
@@ -193,111 +214,6 @@ function doMovement() {
                         movingObj.X -= movingObj.speed;
                         break;
                 }
-
-                /*
-                if (roomsMoving[room][i].steps === 0) {
-                    let validPick = false;
-
-                    let randomDir = 0;
-                    let randomSteps = 0;
-
-                    while (!validPick) {
-                        // Define the enemy's range
-                        let rangeL = roomsMoving[room][i].rangeL;
-                        let rangeR = roomsMoving[room][i].rangeR;
-                        let rangeU = roomsMoving[room][i].rangeU;
-                        let rangeD = roomsMoving[room][i].rangeD;
-                        // Dummy test coords FOR NOW
-                        let testCoords = {
-                            X: roomsMoving[room][i].X,
-                            Y: roomsMoving[room][i].Y
-                        }
-
-                        randomDir = Math.floor(Math.random() * 3.999);
-                        randomSteps = Math.floor(Math.random() * 9.999 + 5);
-
-                        if (testCoords.Y + roomsMoving[room][i].H > rangeD - 10) {
-                            randomDir = 0;
-                        } else if (testCoords.Y < rangeU + 10) {
-                            randomDir = 2;
-                        } else if (testCoords.X < rangeL + 10) {
-                            randomDir = 1;
-                        } else if (testCoords.X + roomsMoving[room][i].H > rangeR - 10) {
-                            randomDir = 3;
-                        }
-
-
-                        if (verbose > 1) {
-                            console.log(`dir/steps: ${randomDir}, ${randomSteps}`);
-                        }
-
-                        if (roomsMoving[room][i].direction === 0) {
-                            testCoords.Y -= roomsMoving[room][i].speed * roomsMoving[room][i].steps;
-                        } else if (roomsMoving[room][i].direction === 1) {
-                            testCoords.X += roomsMoving[room][i].speed * roomsMoving[room][i].steps
-                        } else if (roomsMoving[room][i].direction === 2) {
-                            testCoords.Y += roomsMoving[room][i].speed * roomsMoving[room][i].steps;
-                        } else if (roomsMoving[room][i].direction === 3) {
-                            testCoords.X -= roomsMoving[room][i].speed * roomsMoving[room][i].steps;
-                        }
-
-                        let testL = testCoords.X;
-                        let testR = testCoords.X + roomsMoving[room][i].W;
-                        let testU = testCoords.Y;
-                        let testD = testCoords.Y + roomsMoving[room][i].H;
-
-                        if (verbose > 1) {
-                            console.log(`testCoords X/Y ${testCoords.X} - ${testCoords.Y}. Test: ${!(testD <= rangeU || testU >= rangeD || testR <= rangeL || testL >= rangeR)}`);
-                        }
-                        if (!(testD <= rangeU || testU >= rangeD || testR <= rangeL || testL >= rangeR)) {
-                            roomsMoving[room][i].direction = randomDir;
-                            roomsMoving[room][i].steps = randomSteps;
-                            switch (randomDir) {
-                                case 0:
-                                    roomsMoving[room][i].sprite.src = "assets/game_assets/non_player/ClownUp.png";
-                                    break;
-                                case 1:
-                                    roomsMoving[room][i].sprite.src = "assets/game_assets/non_player/ClownRight.png";
-                                    break;
-                                case 2:
-                                    roomsMoving[room][i].sprite.src = "assets/game_assets/non_player/ClownDown.png";
-                                    break;
-                                case 3:
-                                    roomsMoving[room][i].sprite.src = "assets/game_assets/non_player/ClownLeft.png";
-                                    break;
-                            }
-                            validPick = true;
-                        }
-                    }
-                }  else {
-
-                    if (roomsMoving[room][i].direction === 0) { // 0: -Y, 1: +X, 2: +Y, 3: -X
-                        roomsMoving[room][i].Y -= roomsMoving[room][i].speed;
-                        if (roomsMoving[room][i].Y < roomsMoving[room][i].rangeU) {
-                            roomsMoving[room][i].Y += roomsMoving[room][i].speed* 2;
-                            roomsMoving[room][i].steps = 1;
-                        }
-                    } else if (roomsMoving[room][i].direction === 1) {
-                        roomsMoving[room][i].X += roomsMoving[room][i].speed;
-                        if (roomsMoving[room][i].X < roomsMoving[room][i].rangeR) {
-                            roomsMoving[room][i].X -= roomsMoving[room][i].speed* 2;
-                            roomsMoving[room][i].steps = 1;
-                        }
-                    } else if (roomsMoving[room][i].direction === 2) {
-                        roomsMoving[room][i].Y += roomsMoving[room][i].speed;
-                        if (roomsMoving[room][i].Y > roomsMoving[room][i].rangeD) {
-                            roomsMoving[room][i].Y -= roomsMoving[room][i].speed* 2;
-                            roomsMoving[room][i].steps = 1;
-                        }
-                    } else if (roomsMoving[room][i].direction === 3) {
-                        roomsMoving[room][i].X -= roomsMoving[room][i].speed;
-                        if (roomsMoving[room][i].X < roomsMoving[room][i].rangeL) {
-                            roomsMoving[room][i].X += roomsMoving[room][i].speed * 2;
-                            roomsMoving[room][i].steps = 1;
-                        }
-                    }
-                    roomsMoving[room][i].steps--;
-                }*/
             }
         }
     }
@@ -326,6 +242,9 @@ function changeRoom() {
     } else if (room === 3 && char.X >= canvasSize.W - char.W) { // Rm4 -> Stage
         room = 4;
         char.X = 5;
+    } else if (room === 4 && char.X <= 0) {
+        room = 3;
+        char.X = canvasSize.W - defaultBorder;
     }
     roomAsset.src = `assets/game_assets/rooms/room${room}.png`;
 }
@@ -475,6 +394,7 @@ function KeyDown() {
         gameStarted = true;
         control = true;
         spawnSound.play();
+        normalBGMusic.play();
     } else if (event.key === "d" && (!checkCollision({
         X: char.X + char.speed,
         Y: char.Y,
@@ -535,12 +455,14 @@ function ranged() {
 }
 
 function heal() {
-    if (room === 3 && checkCollBetween(r4Heal, char)) {
+    if (room === 3 && checkCollBetween(r4Heal, char) && !r4Heal.destroyed) {
         r4Heal.destroyed = true;
         char.hp = 5;
-    } else if (room === 0 && checkCollBetween(r1Heal, char)) {
+        healSound.play();
+    } else if (room === 0 && checkCollBetween(r1Heal, char) && !r4Heal.destroyed) {
         r1Heal.destroyed = true;
         char.hp = 5;
+        healSound.play();
     }
 }
 
@@ -727,6 +649,12 @@ function init() {
     leverSound = new Audio('assets/game_assets/misc/lever.mp3');
     spawnSound = new Audio('assets/game_assets/misc/spawn.mp3');
     gameOverSound = new Audio('assets/game_assets/misc/game_over.mp3');
+    healSound = new Audio('assets/game_assets/misc/heal.mp3');
+    bossStartSound = new Audio('assets/game_assets/misc/wayBlocked.mp3');
+    laughSound = new Audio('assets/game_assets/misc/laugh.mp3');
+
+    normalBGMusic = new Audio('assets/game_assets/misc/mama.mp3');
+    bossMusic = new Audio('assets/game_assets/misc/dead!.mp3');
 
 
     // Define game size and default wall border
@@ -741,13 +669,15 @@ function init() {
 
     // Define game state variables
     gameStarted = false;
-    room = 1;
+    room = 3;
     invincible = 0;
     invinc_def = 30;
     control = false;
     dialogue_loc = 0;
     save1Reached = false;
+
     bossFight = false;
+    mikuInPlace = false;
 
     //Initialize character sprite and sprite
     char = {
@@ -927,16 +857,38 @@ function defineRooms() {
         interactable: false,
         enemy: true,
         destructible: true,
-        hp: 4,
+        hp: 6,
         destroyed: false,
         rangeR: 970,
         rangeL: 80,
         rangeU: 400,
         rangeD: 570,
         direction: 2,
-        speed: 5
+        speed: 3,
+        type: "Clown"
     };
     r2clown.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+
+    r2vamp = {
+        X: 565,
+        Y: 165,
+        sprite: new Image(),
+        H: 70,
+        W: 70,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 3,
+        destroyed: false,
+        rangeR: 970,
+        rangeL: 160,
+        rangeU: 80,
+        rangeD: 250,
+        direction: 2,
+        speed: 5,
+        type: "Vamp"
+    };
+    r2vamp.sprite.src = "assets/game_assets/non_player/VampDown.png";
 
     r2Door = {
         X: 1200,
@@ -1050,6 +1002,27 @@ function defineRooms() {
     r2rose6.sprite.src = "assets/game_assets/sprites/roses.png";
 
     // Room 3
+    r3clown = {
+        X: 245,
+        Y: 325,
+        sprite: new Image(),
+        H: 70,
+        W: 70,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 6,
+        destroyed: false,
+        rangeR: 410,
+        rangeL: 80,
+        rangeU: 80,
+        rangeD: 510,
+        direction: 2,
+        speed: 3,
+        type: "Clown"
+    };
+    r3clown.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+
     r3rose = {
         X: 560,
         Y: 320,
@@ -1232,6 +1205,7 @@ function defineRooms() {
     };
     r3Obstacle5.sprite.src = "assets/game_assets/sprites/obstacle.png";
 
+    // Room 4
     r4Heal = {
         X: 1125,
         Y: 325,
@@ -1244,6 +1218,63 @@ function defineRooms() {
         destroyed: false
     };
     r4Heal.sprite.src = "assets/game_assets/sprites/hearticon.png";
+
+    r4clown1 = {
+        X: 645,
+        Y: 245,
+        sprite: new Image(),
+        H: 70,
+        W: 70,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 6,
+        destroyed: false,
+        rangeR: 880,
+        rangeL: 160,
+        rangeU: 160,
+        rangeD: 490,
+        direction: 2,
+        speed: 3,
+        type: "Clown"
+    };
+    r4clown1.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+
+    r4clown2 = {
+        X: 645,
+        Y: 405,
+        sprite: new Image(),
+        H: 70,
+        W: 70,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 6,
+        destroyed: false,
+        rangeR: 880,
+        rangeL: 160,
+        rangeU: 160,
+        rangeD: 490,
+        direction: 2,
+        speed: 3,
+        type: "Clown"
+    };
+    r4clown1.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+
+    // Room 5
+    r5Obstacle = {
+        X: 0,
+        Y: 320,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: false,
+        destructible: false,
+        hp: 1,
+        destroyed: true
+    };
+    r5Obstacle.sprite.src = "assets/game_assets/sprites/wall.png";
 
     r5rose1 = {
         X: 720,
@@ -1315,24 +1346,41 @@ function defineRooms() {
     };
     r5rose5.sprite.src = "assets/game_assets/sprites/roses.png";
 
+    bossMiku = {
+        X: 1040,
+        Y: 0 - 240,
+        sprite: new Image(),
+        H: 240,
+        W: 160,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 20,
+        destroyed: false,
+        direction: 2,
+        speed: 5,
+        type: "miku"
+    };
+    bossMiku.sprite.src = "assets/game_assets/non_player/miku.png";
+
     room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle, r1rose1, r1rose2, r1rose3, r1Heal];
-    room2Objects = [r2Door, r2Obstacle, r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6, r2clown];
-    room3Objects = [r3rose, r3Door1, r3Door2, r3Door3, r3Lever1, r3Lever2, r3Lever3, r3Lever4, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
-    room4Objects = [r4Heal];
-    room5Objects = [r5rose1, r5rose2, r5rose3, r5rose4, r5rose5];
+    room2Objects = [r2Door, r2Obstacle, r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6, r2clown, r2vamp];
+    room3Objects = [r3clown, r3rose, r3Door1, r3Door2, r3Door3, r3Lever1, r3Lever2, r3Lever3, r3Lever4, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
+    room4Objects = [r4Heal, r4clown1, r4clown2];
+    room5Objects = [bossMiku, r5rose1, r5rose2, r5rose3, r5rose4, r5rose5, r5Obstacle];
     roomObjects = [room1Objects, room2Objects, room3Objects, room4Objects, room5Objects];
 
     room1dmgable = [r1rose1, r1rose2, r1rose3];
-    room2dmgable = [r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6, r2clown];
-    room3dmgable = [r3rose];
-    room4dmgable = [];
+    room2dmgable = [r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6, r2clown, r2vamp];
+    room3dmgable = [r3clown, r3rose];
+    room4dmgable = [r4clown1, r4clown2];
     room5dmgable = [r5rose1, r5rose2, r5rose3, r5rose4, r5rose5]
     roomsdmgable = [room1dmgable, room2dmgable, room3dmgable, room4dmgable, room5dmgable];
 
     room1Moving = [];
-    room2Moving = [r2clown];
-    room3Moving = [];
-    room4Moving = [];
+    room2Moving = [r2clown, r2vamp];
+    room3Moving = [r3clown];
+    room4Moving = [r4clown1, r4clown2];
     room5Moving = [];
     roomsMoving = [room1Moving, room2Moving, room3Moving, room4Moving, room5Moving];
 
@@ -1622,8 +1670,8 @@ function defineRooms() {
     room2Collision = [room2Top, room2Bottom1, room2Bottom2, room2Left1, room2Left2, room2Right1, room2Right2, room2Center, r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6];
     room3Collision = [r3rose, room2Top, room1Bottom, room1Left, room3Right1, room3Right2, room3Wall1, room3Wall2, room3Wall3, room3Wall4, room3Wall5, r3Door1, r3Door2, r3Door3, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
     room4Collision = [room2Right1, room2Right2, room2Top, room1Bottom, room4Left1, room4Left2];
-    room5Collision = [room4Left1, room4Left2, room1Bottom, room2Top, room1Right, room5Wall1, room5Wall2];
-    roomsCollision = [room1Collision, room2Collision, room3Collision, room4Collision, room5Collision, r5rose1, r5rose2, r5rose3, r5rose4, r5rose5];
+    room5Collision = [room4Left1, room4Left2, room1Bottom, room2Top, room1Right, room5Wall1, room5Wall2, r5Obstacle, r5rose1, r5rose2, r5rose3, r5rose4, r5rose5];
+    roomsCollision = [room1Collision, room2Collision, room3Collision, room4Collision, room5Collision];
 
     for (i = 1; i < 15; i++) {
         roseObj1 = {
