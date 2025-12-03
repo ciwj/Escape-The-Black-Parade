@@ -1,7 +1,7 @@
 // Game code
 
 // Define logging level
-verbose = 0; // 0 - no console logging, 1 - basic console logging, 2 - some console logging, 3 - log everything
+verbose = 2; // 0 - no console logging, 1 - basic console logging, 2 - some console logging, 3 - log everything
 
 // Run game initialization
 init()
@@ -108,6 +108,93 @@ function doMovement() {
     if (roomsMoving[room].length > 0) {
         for (i = 0; i < roomsMoving[room].length; i++) {
             if (!roomsMoving[room][i].destroyed) {
+
+                let movingObj = roomsMoving[room][i];
+
+                let randomDir = -1;
+
+                let changeDir = false;
+                let noL = false;
+                let noR = false;
+                let noU = false;
+                let noD = false;
+
+                // If it's near the edge of the range, change the direction
+                if (movingObj.rangeL + 10 > movingObj.X) {
+                    noL = true;
+                    changeDir = true;
+                } else if (movingObj.rangeR - 10 < movingObj.X) {
+                    noR = true;
+                    changeDir = true;
+                } else if (movingObj.rangeU + 10 > movingObj.Y) {
+                    noU = true;
+                    changeDir = true;
+                } else if (movingObj.rangeD - 10 < movingObj.Y) {
+                    noD = true;
+                    changeDir = true;
+                }
+
+                if (verbose > 2) {
+                    console.log(`RangeL: ${movingObj.rangeL + 10 < movingObj.X} RangeR: ${movingObj.rangeR - 10 > movingObj.X} RangeU: ${movingObj.rangeU + 10 < movingObj.Y} RangeD: ${movingObj.rangeD - 10 > movingObj.Y}`);
+                    console.log(`X/Y: ${movingObj.X} ${movingObj.Y} RangeL: ${movingObj.rangeL + 10} RangeR: ${movingObj.rangeR - 10} RangeU: ${movingObj.rangeU + 10} RangeD: ${movingObj.rangeD - 10}`);
+                }
+
+                // Run X% chance of changing direction anyway
+                if (Math.random() * 12 < 1) {
+                    changeDir = true;
+                    if (verbose > 2) {
+                        console.log(`Change movement dir randomly!`);
+                    }
+                }
+
+                if (changeDir) {
+                    randomDir = Math.floor(Math.random() * 3.999);
+                    if (randomDir === 0 && noU) {
+                        randomDir = 2;
+                    } else if (randomDir === 1 && noR) {
+                        randomDir = 3;
+                    } else if (randomDir === 2 && noD) {
+                        randomDir = 0;
+                    } else if (randomDir === 3 && noL) {
+                        randomDir = 1;
+                    }
+
+                    movingObj.direction = randomDir;
+
+                    switch (randomDir) {
+                        case 0:
+                            movingObj.sprite.src = "assets/game_assets/non_player/ClownUp.png";
+                            break;
+                        case 1:
+                            movingObj.sprite.src = "assets/game_assets/non_player/ClownRight.png";
+                            break;
+                        case 2:
+                            movingObj.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+                            break;
+                        case 3:
+                            movingObj.sprite.src = "assets/game_assets/non_player/ClownLeft.png";
+                            break;
+                    }
+
+                }
+
+                // Then move in direction
+                switch (movingObj.direction) {
+                    case 0:
+                        movingObj.Y -= movingObj.speed;
+                        break;
+                    case 1:
+                        movingObj.X += movingObj.speed;
+                        break;
+                    case 2:
+                        movingObj.Y += movingObj.speed;
+                        break;
+                    case 3:
+                        movingObj.X -= movingObj.speed;
+                        break;
+                }
+
+                /*
                 if (roomsMoving[room][i].steps === 0) {
                     let validPick = false;
 
@@ -210,7 +297,7 @@ function doMovement() {
                         }
                     }
                     roomsMoving[room][i].steps--;
-                }
+                }*/
             }
         }
     }
@@ -842,12 +929,11 @@ function defineRooms() {
         destructible: true,
         hp: 4,
         destroyed: false,
-        rangeR: 960,
-        rangeL: 90,
+        rangeR: 970,
+        rangeL: 80,
         rangeU: 400,
-        rangeD: 560,
+        rangeD: 570,
         direction: 2,
-        steps: 0,
         speed: 5
     };
     r2clown.sprite.src = "assets/game_assets/non_player/ClownDown.png";
