@@ -14,7 +14,7 @@ function mainLoop() {
     ctx.clearRect(0, 0, 1280, 720);
     // If game hasn't started, draw starting UI
     if (!gameStarted) {
-        ctx.drawImage(pressAnyKey, 390, 273);
+        ctx.drawImage(pressAnyKey, 0, 0);
     }
     if (char.hp === 0) {
         ctx.drawImage(gameOverImg, 0, 0);
@@ -27,9 +27,10 @@ function mainLoop() {
         doMovement();
         handle_dmg();
         heal();
-        // Draw collision boxes
-            //ctx.fillStyle = "green";
-            //roomsCollision[room].forEach(drawRectFromObj);
+        check_savepoint();
+
+        handle_boss();
+
         // Draw room objects
 
         roomObjects[room].forEach(drawObjects);
@@ -38,6 +39,19 @@ function mainLoop() {
 
         // Draw player sprite
         ctx.drawImage(char.sprite, char.X, char.Y);
+    }
+}
+
+// Check if the savepoints been reached, set savepoint if so
+function check_savepoint() {
+    if (room === 3 && char.X > 960) {
+        save1Reached = true;
+    }
+}
+
+function handle_boss() {
+    if (room === 4 && char.X > 160) {
+        bossFight = true;
     }
 }
 
@@ -91,7 +105,115 @@ function drawText() {
 
 
 function doMovement() {
-    // IMPLEMENT
+    if (roomsMoving[room].length > 0) {
+        for (i = 0; i < roomsMoving[room].length; i++) {
+            if (!roomsMoving[room][i].destroyed) {
+                if (roomsMoving[room][i].steps === 0) {
+                    let validPick = false;
+
+                    let randomDir = 0;
+                    let randomSteps = 0;
+
+                    while (!validPick) {
+                        // Define the enemy's range
+                        let rangeL = roomsMoving[room][i].rangeL;
+                        let rangeR = roomsMoving[room][i].rangeR;
+                        let rangeU = roomsMoving[room][i].rangeU;
+                        let rangeD = roomsMoving[room][i].rangeD;
+                        // Dummy test coords FOR NOW
+                        let testCoords = {
+                            X: roomsMoving[room][i].X,
+                            Y: roomsMoving[room][i].Y
+                        }
+
+                        randomDir = Math.floor(Math.random() * 3.999);
+                        randomSteps = Math.floor(Math.random() * 9.999 + 5);
+
+                        if (testCoords.Y + roomsMoving[room][i].H > rangeD - 10) {
+                            randomDir = 0;
+                        } else if (testCoords.Y < rangeU + 10) {
+                            randomDir = 2;
+                        } else if (testCoords.X < rangeL + 10) {
+                            randomDir = 1;
+                        } else if (testCoords.X + roomsMoving[room][i].H > rangeR - 10) {
+                            randomDir = 3;
+                        }
+
+
+                        if (verbose > 1) {
+                            console.log(`dir/steps: ${randomDir}, ${randomSteps}`);
+                        }
+
+                        if (roomsMoving[room][i].direction === 0) {
+                            testCoords.Y -= roomsMoving[room][i].speed * roomsMoving[room][i].steps;
+                        } else if (roomsMoving[room][i].direction === 1) {
+                            testCoords.X += roomsMoving[room][i].speed * roomsMoving[room][i].steps
+                        } else if (roomsMoving[room][i].direction === 2) {
+                            testCoords.Y += roomsMoving[room][i].speed * roomsMoving[room][i].steps;
+                        } else if (roomsMoving[room][i].direction === 3) {
+                            testCoords.X -= roomsMoving[room][i].speed * roomsMoving[room][i].steps;
+                        }
+
+                        let testL = testCoords.X;
+                        let testR = testCoords.X + roomsMoving[room][i].W;
+                        let testU = testCoords.Y;
+                        let testD = testCoords.Y + roomsMoving[room][i].H;
+
+                        if (verbose > 1) {
+                            console.log(`testCoords X/Y ${testCoords.X} - ${testCoords.Y}. Test: ${!(testD <= rangeU || testU >= rangeD || testR <= rangeL || testL >= rangeR)}`);
+                        }
+                        if (!(testD <= rangeU || testU >= rangeD || testR <= rangeL || testL >= rangeR)) {
+                            roomsMoving[room][i].direction = randomDir;
+                            roomsMoving[room][i].steps = randomSteps;
+                            switch (randomDir) {
+                                case 0:
+                                    roomsMoving[room][i].sprite.src = "assets/game_assets/non_player/ClownUp.png";
+                                    break;
+                                case 1:
+                                    roomsMoving[room][i].sprite.src = "assets/game_assets/non_player/ClownRight.png";
+                                    break;
+                                case 2:
+                                    roomsMoving[room][i].sprite.src = "assets/game_assets/non_player/ClownDown.png";
+                                    break;
+                                case 3:
+                                    roomsMoving[room][i].sprite.src = "assets/game_assets/non_player/ClownLeft.png";
+                                    break;
+                            }
+                            validPick = true;
+                        }
+                    }
+                }  else {
+
+                    if (roomsMoving[room][i].direction === 0) { // 0: -Y, 1: +X, 2: +Y, 3: -X
+                        roomsMoving[room][i].Y -= roomsMoving[room][i].speed;
+                        if (roomsMoving[room][i].Y < roomsMoving[room][i].rangeU) {
+                            roomsMoving[room][i].Y += roomsMoving[room][i].speed* 2;
+                            roomsMoving[room][i].steps = 1;
+                        }
+                    } else if (roomsMoving[room][i].direction === 1) {
+                        roomsMoving[room][i].X += roomsMoving[room][i].speed;
+                        if (roomsMoving[room][i].X < roomsMoving[room][i].rangeR) {
+                            roomsMoving[room][i].X -= roomsMoving[room][i].speed* 2;
+                            roomsMoving[room][i].steps = 1;
+                        }
+                    } else if (roomsMoving[room][i].direction === 2) {
+                        roomsMoving[room][i].Y += roomsMoving[room][i].speed;
+                        if (roomsMoving[room][i].Y > roomsMoving[room][i].rangeD) {
+                            roomsMoving[room][i].Y -= roomsMoving[room][i].speed* 2;
+                            roomsMoving[room][i].steps = 1;
+                        }
+                    } else if (roomsMoving[room][i].direction === 3) {
+                        roomsMoving[room][i].X -= roomsMoving[room][i].speed;
+                        if (roomsMoving[room][i].X < roomsMoving[room][i].rangeL) {
+                            roomsMoving[room][i].X += roomsMoving[room][i].speed * 2;
+                            roomsMoving[room][i].steps = 1;
+                        }
+                    }
+                    roomsMoving[room][i].steps--;
+                }
+            }
+        }
+    }
 }
 
 // Room transition function
@@ -308,7 +430,9 @@ function KeyDown() {
             char.X = 965;
             char.Y = 245;
         } else {
-            room = 3
+            room = 3;
+            char.X = 960;
+            char.Y = 320;
         }
 
     }
@@ -526,16 +650,17 @@ function init() {
     defaultBorder = 80;
 
     roomAsset = new Image();
-    roomAsset.src = "assets/game_assets/rooms/room0";
+    roomAsset.src = "assets/game_assets/rooms/room0.png";
 
     // Define game state variables
     gameStarted = false;
-    room = 0;
+    room = 1;
     invincible = 0;
     invinc_def = 30;
     control = false;
     dialogue_loc = 0;
     save1Reached = false;
+    bossFight = false;
 
     //Initialize character sprite and sprite
     char = {
@@ -706,6 +831,27 @@ function defineRooms() {
 
 
     // Room 2
+    r2clown = {
+        X: 565,
+        Y: 485,
+        sprite: new Image(),
+        H: 70,
+        W: 70,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 4,
+        destroyed: false,
+        rangeR: 960,
+        rangeL: 90,
+        rangeU: 400,
+        rangeD: 560,
+        direction: 2,
+        steps: 0,
+        speed: 5
+    };
+    r2clown.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+
     r2Door = {
         X: 1200,
         Y: 320,
@@ -1013,19 +1159,96 @@ function defineRooms() {
     };
     r4Heal.sprite.src = "assets/game_assets/sprites/hearticon.png";
 
+    r5rose1 = {
+        X: 720,
+        Y: 160,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r5rose1.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r5rose2 = {
+        X: 720,
+        Y: 480,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r5rose2.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r5rose3 = {
+        X: 640,
+        Y: 240,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r5rose3.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r5rose4 = {
+        X: 640,
+        Y: 400,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r5rose4.sprite.src = "assets/game_assets/sprites/roses.png";
+
+    r5rose5 = {
+        X: 560,
+        Y: 320,
+        sprite: new Image(),
+        H: 80,
+        W: 80,
+        interactable: false,
+        enemy: true,
+        destructible: true,
+        hp: 1,
+        destroyed: false
+    };
+    r5rose5.sprite.src = "assets/game_assets/sprites/roses.png";
+
     room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle, r1rose1, r1rose2, r1rose3, r1Heal];
-    room2Objects = [r2Door, r2Obstacle, r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6];
+    room2Objects = [r2Door, r2Obstacle, r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6, r2clown];
     room3Objects = [r3rose, r3Door1, r3Door2, r3Door3, r3Lever1, r3Lever2, r3Lever3, r3Lever4, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
     room4Objects = [r4Heal];
-    room5Objects = [];
+    room5Objects = [r5rose1, r5rose2, r5rose3, r5rose4, r5rose5];
     roomObjects = [room1Objects, room2Objects, room3Objects, room4Objects, room5Objects];
 
     room1dmgable = [r1rose1, r1rose2, r1rose3];
-    room2dmgable = [r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6];
+    room2dmgable = [r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6, r2clown];
     room3dmgable = [r3rose];
     room4dmgable = [];
-    room5dmgable = [];
+    room5dmgable = [r5rose1, r5rose2, r5rose3, r5rose4, r5rose5]
     roomsdmgable = [room1dmgable, room2dmgable, room3dmgable, room4dmgable, room5dmgable];
+
+    room1Moving = [];
+    room2Moving = [r2clown];
+    room3Moving = [];
+    room4Moving = [];
+    room5Moving = [];
+    roomsMoving = [room1Moving, room2Moving, room3Moving, room4Moving, room5Moving];
 
     //
     // Define collision boxes for room 1
@@ -1314,7 +1537,7 @@ function defineRooms() {
     room3Collision = [r3rose, room2Top, room1Bottom, room1Left, room3Right1, room3Right2, room3Wall1, room3Wall2, room3Wall3, room3Wall4, room3Wall5, r3Door1, r3Door2, r3Door3, r3Obstacle1, r3Obstacle2, r3Obstacle3, r3Obstacle4, r3Obstacle5];
     room4Collision = [room2Right1, room2Right2, room2Top, room1Bottom, room4Left1, room4Left2];
     room5Collision = [room4Left1, room4Left2, room1Bottom, room2Top, room1Right, room5Wall1, room5Wall2];
-    roomsCollision = [room1Collision, room2Collision, room3Collision, room4Collision, room5Collision];
+    roomsCollision = [room1Collision, room2Collision, room3Collision, room4Collision, room5Collision, r5rose1, r5rose2, r5rose3, r5rose4, r5rose5];
 
     for (i = 1; i < 15; i++) {
         roseObj1 = {
