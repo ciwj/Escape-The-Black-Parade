@@ -12,7 +12,7 @@ header {
     color: ghostwhite;
 }
 
-main {
+#mainContent {
     display: flex;
     flex-direction: column;
     gap: 60px;
@@ -20,6 +20,37 @@ main {
     justify-content: center;
     padding: 50px 0px 100px 0px;
     flex-grow: 1;
+    grid-area: center;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    grid-template-areas:
+    "left center right";
+}
+
+#leftContainer {
+    grid-area: left;
+}
+
+#rightContainer {
+    grid-area: right;
+}
+
+.imgContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#leftContainer img {
+    padding-left: 150px;
+}
+
+#rightContainer img {
+    padding-right: 150px;
 }
 
 main a {
@@ -43,6 +74,11 @@ body {
     height: 100%;
     margin: 0px;
     background-color: black;
+
+    color: ghostwhite;
+    font-family: "Courier New";
+    font-weight: bolder;
+    font-size: larger;
 }
 
 html {
@@ -57,12 +93,12 @@ p {
     font-size: larger;
 }
 
-li {
-    color: ghostwhite;
-    font-family: "Courier New";
-    font-weight: bolder;
+main ul li {
+    list-style-type: square;
+}
+
+.firstLI {
     list-style-type: none;
-    font-size: larger;
 }
 
 footer {
