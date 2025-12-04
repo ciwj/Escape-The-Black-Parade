@@ -1,7 +1,7 @@
 // Game code
 
 // Define logging level
-verbose = 2; // 0 - no console logging, 1 - basic console logging, 2 - some console logging, 3 - log everything
+verbose = 0; // 0 - no console logging, 1 - basic console logging, 2 - some console logging, 3 - log everything
 
 // Run game initialization
 init()
@@ -12,35 +12,40 @@ init()
 function mainLoop() {
     // Clear last drawn frame
     ctx.clearRect(0, 0, 1280, 720);
-    // If game hasn't started, draw starting UI
-    if (!gameStarted) {
-        ctx.drawImage(pressAnyKey, 0, 0);
-    }
-    if (char.hp === 0) {
-        ctx.drawImage(gameOverImg, 0, 0);
-    }
-    // Otherwise, draw the level
-    if (gameStarted && char.hp > 0) {
-        ctx.drawImage(roomAsset, 0, 0);
 
-        handle_animation();
-        doMovement();
-        handle_dmg();
-        heal();
-        check_savepoint();
+    if (bossDefeated) {
+        ctx.drawImage(gameWonSprite, 0, 0);
+    } else {
+        // If game hasn't started, draw starting UI
+        if (!gameStarted) {
+            ctx.drawImage(pressAnyKey, 0, 0);
+        }
+        if (char.hp === 0) {
+            ctx.drawImage(gameOverImg, 0, 0);
+        }
+        // Otherwise, draw the level
+        if (gameStarted && char.hp > 0) {
+            ctx.drawImage(roomAsset, 0, 0);
 
-        handle_boss();
+            handle_animation();
+            doMovement();
+            handle_dmg();
+            heal();
+            check_savepoint();
 
-        // Draw room objects
+            handle_boss();
 
-        roomObjects[room].forEach(drawObjects);
-        drawUI();
-        drawText();
+            // Draw room objects
 
-        // Draw player sprite
-        ctx.drawImage(char.sprite, char.X, char.Y);
-        if(fightStartSequence >= 1) {
-            ctx.drawImage(spotlight.sprite, char.X + spotlight.offsetX, char.Y + spotlight.offsetY);
+            roomObjects[room].forEach(drawObjects);
+            drawUI();
+            drawText();
+
+            // Draw player sprite
+            ctx.drawImage(char.sprite, char.X, char.Y);
+            if (fightStartSequence >= 1) {
+                ctx.drawImage(spotlight.sprite, char.X + spotlight.offsetX, char.Y + spotlight.offsetY);
+            }
         }
     }
 }
@@ -53,7 +58,7 @@ function check_savepoint() {
 }
 
 function handle_boss() {
-    if (((bossStagger && bossFight) || (bossFight && curtains.destroyed) || !bossFight) && room === 4 ) {
+    if (((bossStagger && bossFight) || (bossFight && curtains.destroyed) || !bossFight) && room === 4) {
         ctx.drawImage(curtainsDrawn.sprite, curtainsDrawn.X, curtainsDrawn.Y);
     } // Draw drawn curtains if they should be drawn
 
@@ -118,15 +123,18 @@ function handle_boss() {
             fightStartSequence++;
 
             laughSound.play();
-            bossFightStarted = true;
             staggerCounter = 0;
             control = true;
 
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
+        } else if (bossTicks >= 60 + 25 && fightStartSequence === 7) {
+            bossFightStarted = true;
             attackInterval = setInterval(bossAttack, 5000);
+            bossAttack();
         }
+
 
 
         bossTicks++; // Time passed since fight started in 33ms increments
@@ -135,43 +143,67 @@ function handle_boss() {
     if (bossFightStarted) {
         bossMusic.play();
 
-        if (bossMiku.hp <= 0) {
+        if (bossMiku.hp === 0) {
             endGame();
         }
     }
 }
 
 function bossAttack() {
-    if (staggerCounter >= 3) { // If three attacks have happened, next will be a stagger
-        bossStagger = true;
-        staggerTimer = 2; // Stagger for this many attack cycles
-    }
-
     if (!bossStagger) { // If not in a stagger, pick an attack and execute it
         staggerCounter++;
-        switch (Math.floor(Math.random(2.999))) {
+        switch (Math.floor(Math.random() * 2.999)) {
             case 0:
+                if (verbose > 0) {
+                    console.log("Throwing fireballs!");
+                }
                 throwFireballs();
+                if (staggerCounter >= 3) { // If three attacks have happened, next will be a stagger
+                    bossStagger = true;
+                    staggerTimer = 1; // Stagger for this many attack cycles
+                    curtains.destroyed = true;
+                }
                 break;
             case 1:
+                if (verbose > 0) {
+                    console.log("Summoning enemies!");
+                }
                 summonEnemies();
+                if (staggerCounter >= 3) { // If three attacks have happened, next will be a stagger
+                    bossStagger = true;
+                    staggerTimer = 1; // Stagger for this many attack cycles
+                    curtains.destroyed = true;
+                }
                 break;
             case 2:
+                if (verbose > 0) {
+                    console.log("Spawning roses!");
+                }
                 summonRoses();
+                if (staggerCounter >= 3) { // If three attacks have happened, next will be a stagger
+                    bossStagger = true;
+                    staggerTimer = 1; // Stagger for this many attack cycles
+                    curtains.destroyed = true;
+                }
                 break;
         }
 
     } else { // If currently staggered, just manage the stagger
         staggerTimer--;
-        if(staggerTimer <= 0) {
+        if (staggerTimer <= 0) {
             bossStagger = false;
+            curtains.destroyed = false;
+            if (char.X > 810) {
+                char.X = 805;
+                char.Y = 305;
+            }
         }
     }
 
 }
 
 function throwFireballs() {
-    for (i = 0; i < Math.floor(Math.random() * 2.999 + 1); i++) {
+    for (i = 0; i < Math.floor(Math.random() * 1.999) + 1; i++) {
         newFireball = {
             X: -1,
             Y: -1,
@@ -184,7 +216,7 @@ function throwFireballs() {
             hp: 1,
             destroyed: false,
             type: "fireball",
-            speed: 15,
+            speed: 10,
             direction: -1
         };
         newFireball.sprite.src = "assets/game_assets/sprites/fireball.png"; // Duplicate fireball
@@ -192,7 +224,7 @@ function throwFireballs() {
         // Select random X, Y, and direction
         let randomX = Math.floor(Math.random() * 720 - 0.0001) + 90;
         let randomY = Math.floor(Math.random() * canvasSize.H - 160 - 0.0001) + 80;
-        let randomDir = Math.floor(Math.random()*3.999);
+        let randomDir = Math.floor(Math.random() * 3.999);
         newFireball.direction = randomDir;
 
         // Set starting positions for the fireball
@@ -228,11 +260,112 @@ function summonEnemies() {
     }
     for (i = 0; i < enemiesToGen; i++) { // Run for random # of enemies
 
+        let validPlacement = false;
+        let randomCoordsX = -1;
+        let randomCoordsY = -1;
+        let attemptCounter = 0;
+
+        while (!validPlacement) { // Run until valid or it fails
+            randomCoordsX = Math.floor(Math.random() * (710 - 80 - 0.0001)) + 80; // Randomly generate X
+            randomCoordsY = Math.floor(Math.random() * (550 - 80 - 0.0001)) + 80; // Randomly generate Y
+            let isValid = true;
+
+            if (verbose > 1) {
+                console.log(`Rose ${i} attempt ${attemptCounter}: X/Y ${randomCoordsX}, ${randomCoordsY}`);
+            }
+
+            let collCheckBox = {
+                X: randomCoordsX - 30,
+                Y: randomCoordsY - 30,
+                H: 70 + 60,
+                W: 70 + 60,
+                destroyed: false
+            }
+
+            let charBiggerBox = {
+                X: char.X - 30,
+                Y: char.Y - 30,
+                H: char.H + 30 * 2,
+                W: char.W + 30 * 2
+            }
+
+            for (n = 0; n < room5Enemies.length; n++) {
+                if (checkCollBetween(room5Enemies[n], collCheckBox)) { // Make sure it doesnt overlap other enemies
+                    isValid = false;
+                }
+            }
+
+            if (checkCollBetween(charBiggerBox, collCheckBox)) { // Make sure it doesnt overlap the player
+                isValid = false;
+            }
+
+
+            if (isValid) { // Stop running if its either worked or too many attempts have happened
+                let newEnemy;
+                if (Math.floor(Math.random() * 2.999)) {
+                    newEnemy = {
+                        X: randomCoordsX,
+                        Y: randomCoordsY,
+                        sprite: new Image(),
+                        H: 70,
+                        W: 70,
+                        interactable: false,
+                        enemy: true,
+                        destructible: true,
+                        hp: 6,
+                        destroyed: false,
+                        rangeR: 750,
+                        rangeL: 100,
+                        rangeU: 80,
+                        rangeD: 570,
+                        direction: 2,
+                        speed: 3,
+                        type: "Clown"
+                    };
+                    newEnemy.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+                } else {
+                    newEnemy = {
+                        X: randomCoordsX,
+                        Y: randomCoordsY,
+                        sprite: new Image(),
+                        H: 70,
+                        W: 70,
+                        interactable: false,
+                        enemy: true,
+                        destructible: true,
+                        hp: 3,
+                        destroyed: false,
+                        rangeR: 750,
+                        rangeL: 100,
+                        rangeU: 80,
+                        rangeD: 570,
+                        direction: 2,
+                        speed: 5,
+                        type: "Vamp"
+                    };
+                    newEnemy.sprite.src = "assets/game_assets/non_player/VampDown.png";
+                }
+
+                room5dmgable.push(newEnemy);
+                room5Objects.push(newEnemy);
+                room5Enemies.push(newEnemy);
+                room5Moving.push(newEnemy);
+
+                validPlacement = true;
+            }
+
+            attemptCounter++;
+            if (attemptCounter >= 15) {
+                validPlacement = true;
+            }
+        }
+
     }
+
 }
 
 function summonRoses() {
-    let rosesToGen = Math.floor(Math.random() * 2.9999) + 1;
+    let rosesToGen = Math.floor(Math.random() * 4.9999) + 1;
     if (verbose > 0) {
         console.log(`Attempting to summon ${rosesToGen} roses`);
     }
@@ -244,8 +377,8 @@ function summonRoses() {
         let attemptCounter = 0;
 
         while (!validPlacement) { // Run until valid or it fails
-            randomGridX = Math.floor(Math.random() * (10 - 0.0001)) + 1; // Randomly generate 1 - 10
-            randomGridY = Math.floor(Math.random() * (7 - 0.0001)) + 1; // Randomly generate 1 - 7
+            randomGridX = Math.floor(Math.random() * (9 - 0.0001)) + 1; // Randomly generate 1 - 10
+            randomGridY = Math.floor(Math.random() * (6 - 0.0001)) + 1; // Randomly generate 1 - 7
             let isValid = true;
 
             if (verbose > 1) {
@@ -312,13 +445,34 @@ function summonRoses() {
 }
 
 function endGame() {
+    control = false;
+    bossMiku.hp = -1;
+
+    setTimeout(() => { // Look down
+        char.direction = 2;
+        char.sprite.src = "assets/game_assets/player/PlayerDown.png";
+    }, 1000);
+
+    setTimeout(() => { // Look back
+        char.direction = 1;
+        char.sprite.src = "assets/game_assets/player/PlayerRight.png";
+    }, 1000);
+    setTimeout(() => { // Disable spotlight
+        fightStartSequence = -1;
+        leverSound.play();
+    }, 750);
+    setTimeout(() => {
+        bossDefeated = true;
+        clearInterval(attackInterval);
+    }, 1500);
+
 
 }
 
 function mikuEnters() {
     if (bossMiku.Y < 200) {
         bossMiku.Y += 5;
-        if(verbose > 1) {
+        if (verbose > 1) {
             console.log(`Miku is at ${bossMiku.Y}`);
         }
         if (bossMiku.Y > 100) {
@@ -803,6 +957,7 @@ function handle_animation() {
             } else if (char.direction === 3) {
                 char.sprite.src = "assets/game_assets/player/playerLeft.png";
             }
+            charAttackFrame = 0;
         }
     }
 
@@ -810,31 +965,34 @@ function handle_animation() {
 
 // Melee attack
 function melee() {
-    if (verbose >= 1) {
-        drawRectFromObj(createBoxInFrontOf(char, 90, 50, char.direction));
-    }
-
-    for (i = 0; i < roomObjects[room].length; i++) {
-
-        // Create a box in front of the player to compare to object distance
-        let boxToCheck = createBoxInFrontOf(char, 90, 50, char.direction);
-
+    if (charAttackFrame === 0) {
         if (verbose >= 1) {
-            console.log("Interaction distance check:" + checkCollBetween(boxToCheck, roomObjects[room][i]));
+            drawRectFromObj(createBoxInFrontOf(char, 90, 50, char.direction));
         }
+        for (i = 0; i < roomObjects[room].length; i++) {
 
-        if (checkCollBetween(boxToCheck, roomObjects[room][i]) && roomObjects[room][i].enemy) {
-            roomObjects[room][i].hp--
-            if (roomObjects[room][i].hp <= 0) {
-                roomObjects[room][i].destroyed = true;
-            }
+            // Create a box in front of the player to compare to object distance
+            let boxToCheck = createBoxInFrontOf(char, 90, 50, char.direction);
+
             if (verbose >= 1) {
-                console.log("Hit detected! Obj HP: " + roomObjects[room][i].hp);
+                console.log("Interaction distance check:" + checkCollBetween(boxToCheck, roomObjects[room][i]));
+            }
+
+            if (checkCollBetween(boxToCheck, roomObjects[room][i]) && roomObjects[room][i].enemy) {
+                roomObjects[room][i].hp--
+                if (roomObjects[room][i].hp <= 0) {
+                    roomObjects[room][i].destroyed = true;
+                }
+                if (verbose >= 1) {
+                    console.log("Hit detected! Obj HP: " + roomObjects[room][i].hp);
+                }
             }
         }
+        charAttackFrame = 1;
+        char.sprite.src = `assets/game_assets/player/melee/frame${charAttackFrame}.png`;
     }
-    charAttackFrame = 1;
-    char.sprite.src = `assets/game_assets/player/melee/frame${charAttackFrame}.png`;
+
+
 }
 
 // Check for collision between any two objects
@@ -946,9 +1104,12 @@ function init() {
     roomAsset = new Image();
     roomAsset.src = "assets/game_assets/rooms/room0.png";
 
+    gameWonSprite = new Image();
+    gameWonSprite.src = "assets/game_assets/misc/winScreen.png";
+
     // Define game state variables
     gameStarted = false;
-    room = 3;
+    room = 0;
     invincible = 0;
     invinc_def = 30;
     control = false;
@@ -964,6 +1125,8 @@ function init() {
     bossTicks = 0;
     fightStartSequence = 0;
     bossDiaEnded = false;
+    bossDefeated = false;
+    attackInterval = 0;
 
 
     //Initialize character sprite and sprite
@@ -1708,7 +1871,7 @@ function defineRooms() {
         offsetX: char.W / 2 - 240 / 2,
         offsetY: char.H - 326 + 60
     };
-    spotlight.sprite.src ="assets/game_assets/rooms/spotlight_red.png";
+    spotlight.sprite.src = "assets/game_assets/rooms/spotlight_red.png";
 
     room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle, r1rose1, r1rose2, r1rose3, r1Heal];
     room2Objects = [r2Door, r2Obstacle, r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6, r2clown, r2vamp];
@@ -2013,6 +2176,8 @@ function defineRooms() {
         destructible: false,
         destroyed: false
     };
+
+    room5Enemies = [];
 
     // Create arrays for walls
     room1Collision = [room1Bottom, room1Left, room1Right, room1Top1, room1Top2, room1Wall1, room1Wall2, room1Wall3, room1Wall4, room1Wall5, miku, dummy, r1Door, r1Obstacle, r1rose1, r1rose2, r1rose3];
