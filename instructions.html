@@ -10,8 +10,84 @@
     <header>
         <h1>How To Play</h1>
     </header>
-    <main>
+    <main id="howtoplay">
+        <div id="mainContent">
+            <section id="instructions">
+                <h2>Gameplay</h2>
+                    <p>In <em>Escape the Black Parade</em>, you play a top-down dungeon-exploring protagonist trying to defeat the clone that's taken over the dungeon! In navigating the dungeon, your protagonist must circumvent hazards and obstacles, open locked doors, and outmaneouver enemies. A helpful NPC teaches you the basics, but will you be able to survive the onslaught at the end?</p>
 
+                <h2>Controls</h2>
+                <ul>
+                    <li class="firstLI">WASD: Up/Down/Right/Left movement</li>
+                    <li class="firstLI">E: Interact with the NPC or levers</li>
+                    <li class="firstLI">J: Attack</li>
+                    <li class="firstLI">R: Restart after game over</li>
+                </ul>
+
+                <h2>Game Mechanics</h2>
+                <ul>
+                    <li class="firstLI">Hazards, Enemies, and Obstacles
+                        <ul>
+                            <li><strong>Roses</strong> deal damage in close proximity, and can be removed by attacking them</li>
+                            <li>Parts of some <strong>walls</strong> are breakable if you attack them. You can recognize them by the scratches in their texture.</li>
+                            <li><strong>Levers</strong> can be flipped by interacting with them and will generally open a door. Levers can either be flipped once or back and forth.</li>
+                            <li><strong>Doors</strong> require a lever to open. The lever for a room may not be in the room the door is in!</li>
+                            <li><strong>Clowns</strong> will hurt you if you get close enough. They take more hits to defeat than vampires but are slower.</li>
+                            <li><strong>Vampires</strong> will also hurt you! They're faster but more fragile than clowns.</li>
+                            <li><strong>The Dummy</strong> is just there to help you practice! How helpful!</li>
+                        </ul>
+                    </li><br>
+                    <li class="firstLI">Boss Fight
+                        <ul>
+                            <li class="firstLI">Once the dialogue and starting sequence is over, the fight will start.</li>
+                            <li>Each fight "cycle" consists of the following stages:
+                                <ul>
+                                    <li>Attack stage: Here, Miku is inaccessible. The player should focus on avoiding damage and taking care of hazards and enemies. During this stage, Miku will attack three times (four on the first cycle), randomly selected from the following:
+                                        <ul>
+                                            <li>Summon Roses: Miku will randomly place 1-5 roses down in the main area, taking care to not place them where the player is or where they get knocked back when the curtain closes.</li>
+                                            <li>Summon Enemies: Similarly to the above, Miku will spawn 1-2 enemies that the player then has to avoid or defeat.</li>
+                                            <li>Throw Fireballs: Miku will throw 1-2 moving fireballs across the stage, which will damage the player if they hit.</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li><br>
+                    <li class="firstLI">
+                        Miscellaneous
+                        <ul>
+                            <li>Attacking will hurt anything (that you can attack or destroy) in front of you - you can't attack again until the current attack animation is over.</li>
+                            <li>In the first (NPC) and last room (starting sequence) dialogue takes place. You can advance the dialogue by pressing E.</li>
+                            <li>To start the game, the player just needs to press any key.</li>
+                            <li>The UI for the player's HP can be seen in the top right corner, notated by the heart. A single note represents 1h, and a double note represents 2hp. So at full HP (5), the player will have two double notes and one single note (2 x 2hp +1hp).</li>
+                            <li>Healing items can be found in the first room and the room before the boss fight, and will replenish the player's HP.</li>
+                            <li>The player respawns at the last summoning circle they've crossed onto. The first is where you spawn at the beginning of the game, and the second is in the room before the boss fight.</li>
+                            <li>Because of how the browser handles keyboard input, the first movement in a direction will be staggered, then smoothen out & speed up.</li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+            </section>
+            <section id="gallery">
+                <h2>Gallery</h2>
+                <p>Put stuff here</p>
+            </section>
+        </div>
+        <div class="imgContainer" id="leftContainer">
+            <img src="assets/game_assets/player/PlayerRight.png" alt="The player's character sprite looking right">
+            <img src="assets/game_assets/player/PlayerRight.png" alt="The player's character sprite looking right">
+            <img src="assets/game_assets/player/PlayerRight.png" alt="The player's character sprite looking right">
+            <img src="assets/game_assets/player/PlayerRight.png" alt="The player's character sprite looking right">
+            <img src="assets/game_assets/player/PlayerRight.png" alt="The player's character sprite looking right">
+        </div>
+        <div class="imgContainer" id="rightContainer">
+            <img src="assets/game_assets/player/PlayerLeft.png" alt="The player's character sprite looking left">
+            <img src="assets/game_assets/player/PlayerLeft.png" alt="The player's character sprite looking left">
+            <img src="assets/game_assets/player/PlayerLeft.png" alt="The player's character sprite looking left">
+            <img src="assets/game_assets/player/PlayerLeft.png" alt="The player's character sprite looking left">
+            <img src="assets/game_assets/player/PlayerLeft.png" alt="The player's character sprite looking left">
+        </div>
     </main>
     <footer>
         <a href="index.html">Return to main page</a>

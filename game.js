@@ -892,6 +892,18 @@ function heal() {
 }
 
 function handle_dmg() {
+    if(dummy.invincible > 0) {
+        dummy.invincible--
+        if(dummy.invincible === 1) {
+            dummy.sprite.src = "assets/game_assets/non_player/dummy.png";
+        }
+    }
+    if(bossMiku.invincible > 0) {
+        bossMiku.invincible--
+        if(bossMiku.invincible === 1) {
+            bossMiku.sprite.src = "assets/game_assets/non_player/miku.png";
+        }
+    }
     if (invincible > 0) { // count i-frames
         if (invincible === 1) {
             char.sprite.src = dmgSpriteTemp;
@@ -980,6 +992,13 @@ function melee() {
 
             if (checkCollBetween(boxToCheck, roomObjects[room][i]) && roomObjects[room][i].enemy) {
                 roomObjects[room][i].hp--
+                if(roomObjects[room][i].type === "theDummy") {
+                    roomObjects[room][i].sprite.src = "assets/game_assets/non_player/dummy_hurt.png";
+                    roomObjects[room][i].invincible = 10;
+                } else if (roomObjects[room][i].type === "miku") {
+                    roomObjects[room][i].sprite.src = "assets/game_assets/non_player/miku_hurt.png";
+                    roomObjects[room][i].invincible = 10;
+                }
                 if (roomObjects[room][i].hp <= 0) {
                     roomObjects[room][i].destroyed = true;
                 }
@@ -1195,7 +1214,9 @@ function defineRooms() {
         enemy: true,
         destructible: false,
         destroyed: false,
-        hp: 999
+        hp: 999,
+        type: "theDummy",
+        invincible: 0
     };
     dummy.sprite.src = "assets/game_assets/non_player/dummy.png";
 
