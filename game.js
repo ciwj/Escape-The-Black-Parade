@@ -884,7 +884,7 @@ function heal() {
         r4Heal.destroyed = true;
         char.hp = 5;
         healSound.play();
-    } else if (room === 0 && checkCollBetween(r1Heal, char) && !r4Heal.destroyed) {
+    } else if (room === 0 && checkCollBetween(r1Heal, char) && !r1Heal.destroyed) {
         r1Heal.destroyed = true;
         char.hp = 5;
         healSound.play();
@@ -1155,7 +1155,7 @@ function init() {
         sprite: new Image(),
         H: 70,
         W: 70,
-        speed: 5,
+        speed: 8,
         hp: 5,
         direction: 2 // 0-Up 1-Right 2-Down 3-Left
     };
@@ -1173,7 +1173,7 @@ function init() {
 
     // Define dialogue
     dialogue_text = [["weird mystery text. how did you break the game"], ["you broke the game??"], ["oh! hi!!! it's me. hatsune miku."], ["If the circle summoned you here then you must be the one…", "you see, there’s a problem. My evil clone has taken over", "these halls and is trying to usurp my time in the spotlight!"], [".. why do I have an evil clone?", "Why don’t you have an evil clone?", "Are you jealous?? I could make you one if you help me!"], ["Awesome!! I’m glad that’s settled - you help me,", "I help you. You’ll need to know-"], ["Yeah I know you’re confused you just got resurrected AGAIN", "that’s why I’m telling you this!!"],
-        ["Okay. You see that lever over there? Yeah!", "You can flip those with E. Levers do things."], ["This place has gotten sickeningly dangerous too - Debris blocks your way", "and my clone’s minions prowl the halls. The rose bushes have always", "been there but they definitely also hurt so watch yourself."], ["You can keep yourself safe from everything by attacking with J,"], ["I guess if you perish (AGAIN) in your attempt you’ll", "just end up back here, so good luck!"], ["npc ending dialogue (#11) - DOES NOT SHOW"], ["dialogue #12/start of boss miku talking"], ["13"], ["14"], ["15"], ["16"], ["17"], ["18"], ["19"], ["20 - current boss placeholder ending dialogue"]];
+        ["Okay. You see that lever over there? Yeah!", "You can flip those with E. Levers do things."], ["This place has gotten sickeningly dangerous too - Debris blocks your way", "and my clone’s minions prowl the halls. The rose bushes have always", "been there but they definitely also hurt so watch yourself."], ["You can keep yourself safe from everything by attacking with J."], ["I guess if you perish (AGAIN) in your attempt you’ll", "just end up back here, so good luck!"], ["npc ending dialogue (#11) - DOES NOT SHOW"], ["dialogue #12/start of boss miku talking"], ["13"], ["14"], ["15"], ["16"], ["17"], ["18"], ["19"], ["20 - current boss placeholder ending dialogue"]];
 
     // Set interval for redrawing
     setInterval(mainLoop, 33);

@@ -83,9 +83,17 @@ h2 {
 }
 
 #howtoplay {
-    min-height: 1800px;
+    min-height: 3600px;
 }
 
+.imgGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.imgGrid div {
+    padding: 40px;
+}
 
 main a {
     align-content: center;
