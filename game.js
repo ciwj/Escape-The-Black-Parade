@@ -947,7 +947,7 @@ function handle_dmg() {
 
 function check_dmg(obj) {
     // create thin box in every direction of
-    let dmg_margin = 5;
+    let dmg_margin = 7;
     let charBiggerBox = {
         X: char.X - dmg_margin,
         Y: char.Y - dmg_margin,

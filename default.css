@@ -5,7 +5,7 @@ h1 {
 
 header {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: #9c251e;
@@ -83,12 +83,16 @@ h2 {
 }
 
 #howtoplay {
-    min-height: 3600px;
+    min-height: 5100px;
 }
 
 .imgGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+}
+
+.imgGrid img {
+    border: #9c251e 2px solid;
 }
 
 .imgGrid div {
@@ -172,6 +176,28 @@ footer a {
 #gameCanvas {
     background-color: ghostwhite;
     border: #9c251e 10px solid;
+}
+
+nav a {
+    font-size: x-large;
+    align-content: center;
+    text-align: center;
+    width: 75%;
+    font-size: 30px;
+    width: 66%;
+    color: ghostwhite;
+    border: 10px ghostwhite;
+    padding: 10px 10px;
+    font-family: "Bauhaus 93";
+    text-decoration: none;
+}
+
+nav {
+    padding-bottom: 10px;
+}
+
+#howtoplayTitle {
+    margin-bottom: 5px;
 }
 
 #canvasContainer {

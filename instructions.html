@@ -8,15 +8,22 @@
 </head>
 <body>
     <header>
-        <h1>How To Play & Gallery</h1>
+        <h1 id="howtoplayTitle">How To Play & Gallery</h1>
+        <nav>
+            <a href="#gameplay">Gameplay</a>
+            <a href="#controls">Controls</a>
+            <a href="#gamemechanics">Game Mechanics</a>
+            <a href="#gallery">Photo Gallery</a>
+            <a href="#demovideo">Demo Video</a>
+        </nav>
     </header>
     <main id="howtoplay">
         <div id="mainContent">
             <section id="instructions">
-                <h2>Gameplay</h2>
+                <h2 id="gameplay">Gameplay</h2>
                     <p>In <em>Escape the Black Parade</em>, you play a top-down dungeon-exploring protagonist trying to defeat the clone that's taken over the dungeon! In navigating the dungeon, your protagonist must circumvent hazards and obstacles, open locked doors, and outmaneouver enemies. A helpful NPC teaches you the basics, but will you be able to survive the onslaught at the end?</p>
 
-                <h2>Controls</h2>
+                <h2 id="controls">Controls</h2>
                 <ul>
                     <li class="firstLI">WASD: Up/Down/Right/Left movement</li>
                     <li class="firstLI">E: Interact with the NPC or levers</li>
@@ -24,7 +31,7 @@
                     <li class="firstLI">R: Restart after game over</li>
                 </ul>
 
-                <h2>Game Mechanics</h2>
+                <h2 id="gamemechanics">Game Mechanics</h2>
                 <ul>
                     <li class="firstLI">Hazards, Enemies, and Obstacles
                         <ul>
@@ -85,10 +92,46 @@
                         <p>Attack animation</p>
                         <img src="assets/multimedia/attack.gif" width="500">
                     </div>
+                    <div>
+                        <p>NPC dialogue</p>
+                        <img src="assets/multimedia/dialogue1_sc.png" width="500">
+                    </div>
+                    <div>
+                        <p>The second room</p>
+                        <img src="assets/multimedia/room2_sc.png" width="500">
+                    </div>
+                    <div>
+                        <p>The third room</p>
+                        <img src="assets/multimedia/room3_sc.png" width="500">
+                    </div>
+                    <div>
+                        <p>The fourth room</p>
+                        <img src="assets/multimedia/room4_sc.png" width="500">
+                    </div>
+                    <div>
+                        <p>Boss dialogue</p>
+                        <img src="assets/multimedia/boss_dia_sc.png" width="500">
+                    </div>
+                    <div>
+                        <p>Boss attack phase</p>
+                        <img src="assets/multimedia/boss_curtainsclosed_sc.png" width="500">
+                    </div>
+                    <div>
+                        <p>Boss stagger phase</p>
+                        <img src="assets/multimedia/boss_hurt_sc.png" width="500">
+                    </div>
+                    <div>
+                        <p>Game over screen</p>
+                        <img src="assets/game_assets/misc/gameover.png" width="500">
+                    </div>
+                    <div>
+                        <p>Game won screen</p>
+                        <img src="assets/game_assets/misc/win4.png" width="500">
+                    </div>
                 </div>
 
-                <video width="1280" controls>
-
+                <video width="1280" controls id="demovideo">
+                    <source src="/assets/multimedia/demo_video.mp4" type="video/mp4">
                     Sorry, your browser doesn't support video!
                 </video>
 
