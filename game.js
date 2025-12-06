@@ -13,8 +13,26 @@ function mainLoop() {
     // Clear last drawn frame
     ctx.clearRect(0, 0, 1280, 720);
 
-    if (bossDefeated) {
-        ctx.drawImage(gameWonSprite, 0, 0);
+    if (bossDefeated) { // Winscreen
+        if(winScreenLoc === 0) {
+            ctx.drawImage(gameWon1, 0, 0);
+            setTimeout(() => {
+                winScreenLoc = 1;
+            }, 1000);
+        } else if (winScreenLoc === 1) {
+            ctx.drawImage(gameWon2, 0, 0);
+            setTimeout(() => {
+                winScreenLoc = 2;
+            }, 1000);
+        } else if (winScreenLoc === 2) {
+            setTimeout(() => {
+                winScreenLoc = 3;
+            }, 1000);
+            ctx.drawImage(gameWon3, 0, 0);
+        } else if (winScreenLoc === 3) {
+            ctx.drawImage(gameWon4, 0, 0);
+        }
+
     } else {
         // If game hasn't started, draw starting UI
         if (!gameStarted) {
@@ -40,6 +58,10 @@ function mainLoop() {
             roomObjects[room].forEach(drawObjects);
             drawUI();
             drawText();
+
+            if (room !== 4) {
+                normalBGMusic.play();
+            }
 
             // Draw player sprite
             ctx.drawImage(char.sprite, char.X, char.Y);
@@ -521,17 +543,25 @@ function drawObjects(obj) {
 function drawText() {
     if (dialogue_loc !== 0) {
         ctx.fillStyle = "black";
-        ctx.fillRect(40, 20, 1200, 220);
+        //ctx.fillRect(40, 20, 1200, 220);
+        ctx.font = "30px Courier New"
+        ctx.drawImage(dialogueImg, 40, 20);
 
         ctx.fillStyle = "white";
 
         for (i = 0; i < dialogue_text[dialogue_loc].length; i++) {
-            ctx.fillText(dialogue_text[dialogue_loc][i], 70, 80 + i * 60, 1160);
+            if (dialogue_text[dialogue_loc].length <= 2) {
+                ctx.fillText(dialogue_text[dialogue_loc][i], 100, 110 + i * 50, 1160);
+            } else {
+                ctx.fillText(dialogue_text[dialogue_loc][i], 100, 80 + i * 50, 1160);
+            }
         }
-
+        if (dialogue_loc === 15 && !bossDiaLaugh) {
+            laughSound.play();
+            bossDiaLaugh = true;
+        }
     }
 }
-
 
 function doMovement() {
     if (roomsMoving[room].length > 0) {
@@ -765,7 +795,7 @@ function attemptInteract() {
         if (verbose >= 1) {
             console.log("Current dialogue location: " + dialogue_loc);
         }
-        if (dialogue_loc === 11 || dialogue_loc === 1 || dialogue_loc === 20) { // 20 IS THE PLACEHOLDER FOR 1 AFTER THE BOSS'S DIALOGUE
+        if (dialogue_loc === 11 || dialogue_loc === 1 || dialogue_loc === 17) { // 20 IS THE PLACEHOLDER FOR 1 AFTER THE BOSS'S DIALOGUE
             dialogue_loc = 0;
             control = true;
             if (room === 4) {
@@ -852,7 +882,7 @@ function KeyDown() {
         melee();
     }
     if (event.key === "k" && control) {
-        ranged();
+        dodge();
     }
     if (event.key === "r" && char.hp === 0) {
         char.hp = 5;
@@ -875,8 +905,8 @@ function KeyDown() {
 }
 
 // Ranged attack
-function ranged() {
-    // IMPLEMENT
+function dodge() {
+    // NOT IMPLEMENTED
 }
 
 function heal() {
@@ -979,12 +1009,12 @@ function handle_animation() {
 function melee() {
     if (charAttackFrame === 0) {
         if (verbose >= 1) {
-            drawRectFromObj(createBoxInFrontOf(char, 90, 50, char.direction));
+            drawRectFromObj(createBoxInFrontOf(char, 120, 70, char.direction));
         }
         for (i = 0; i < roomObjects[room].length; i++) {
 
             // Create a box in front of the player to compare to object distance
-            let boxToCheck = createBoxInFrontOf(char, 90, 50, char.direction);
+            let boxToCheck = createBoxInFrontOf(char, 120, 70, char.direction);
 
             if (verbose >= 1) {
                 console.log("Interaction distance check:" + checkCollBetween(boxToCheck, roomObjects[room][i]));
@@ -1098,9 +1128,6 @@ function init() {
 
     ctx.font = "40px Helvetica";
 
-    gameOverImg = new Image();
-    gameOverImg.src = "assets/game_assets/misc/gameover.png";
-
     // Define sounds
     leverSound = new Audio('assets/game_assets/misc/lever.mp3');
     spawnSound = new Audio('assets/game_assets/misc/spawn.mp3');
@@ -1123,9 +1150,6 @@ function init() {
     roomAsset = new Image();
     roomAsset.src = "assets/game_assets/rooms/room0.png";
 
-    gameWonSprite = new Image();
-    gameWonSprite.src = "assets/game_assets/misc/winScreen.png";
-
     // Define game state variables
     gameStarted = false;
     room = 0;
@@ -1146,6 +1170,9 @@ function init() {
     bossDiaEnded = false;
     bossDefeated = false;
     attackInterval = 0;
+    bossDiaLaugh = false;
+
+    winScreenLoc = 0;
 
 
     //Initialize character sprite and sprite
@@ -1155,9 +1182,13 @@ function init() {
         sprite: new Image(),
         H: 70,
         W: 70,
+        spriteW: 40,
+        spriteH: 50,
+        spriteOffsetX: 15,
+        spriteOffsetY: 20,
         speed: 8,
         hp: 5,
-        direction: 2 // 0-Up 1-Right 2-Down 3-Left
+        direction: 2, // 0-Up 1-Right 2-Down 3-Left
     };
     char.sprite.src = "assets/game_assets/player/playerDown.png";
 
@@ -1167,13 +1198,46 @@ function init() {
 
     defineRooms();
 
-    // Define starting UI
+    // Define UI assets
     pressAnyKey = new Image();
     pressAnyKey.src = "assets/game_assets/misc/pressAnyKey.png";
 
+    gameWon1 = new Image();
+    gameWon1.src = "assets/game_assets/misc/win1.png";
+
+    gameWon2 = new Image();
+    gameWon2.src = "assets/game_assets/misc/win2.png";
+
+    gameWon3 = new Image();
+    gameWon3.src = "assets/game_assets/misc/win3.png";
+
+    gameWon4 = new Image();
+    gameWon4.src = "assets/game_assets/misc/win4.png";
+
+    gameOverImg = new Image();
+    gameOverImg.src = "assets/game_assets/misc/gameover.png";
+
+    dialogueImg = new Image();
+    dialogueImg.src = "assets/game_assets/misc/dialogue.png";
+
+
     // Define dialogue
-    dialogue_text = [["weird mystery text. how did you break the game"], ["you broke the game??"], ["oh! hi!!! it's me. hatsune miku."], ["If the circle summoned you here then you must be the one…", "you see, there’s a problem. My evil clone has taken over", "these halls and is trying to usurp my time in the spotlight!"], [".. why do I have an evil clone?", "Why don’t you have an evil clone?", "Are you jealous?? I could make you one if you help me!"], ["Awesome!! I’m glad that’s settled - you help me,", "I help you. You’ll need to know-"], ["Yeah I know you’re confused you just got resurrected AGAIN", "that’s why I’m telling you this!!"],
-        ["Okay. You see that lever over there? Yeah!", "You can flip those with E. Levers do things."], ["This place has gotten sickeningly dangerous too - Debris blocks your way", "and my clone’s minions prowl the halls. The rose bushes have always", "been there but they definitely also hurt so watch yourself."], ["You can keep yourself safe from everything by attacking with J."], ["I guess if you perish (AGAIN) in your attempt you’ll", "just end up back here, so good luck!"], ["npc ending dialogue (#11) - DOES NOT SHOW"], ["dialogue #12/start of boss miku talking"], ["13"], ["14"], ["15"], ["16"], ["17"], ["18"], ["19"], ["20 - current boss placeholder ending dialogue"]];
+    dialogue_text = [["weird mystery text. how did you break the game"], ["you broke the game??"],
+        ["oh! hi!!! it's me. hatsune miku."],
+        ["If the circle summoned you here then you must be the one…", "you see, there’s a problem. My evil clone has taken over", "these halls and is trying to usurp my time in the spotlight!"],
+        [".. why do I have an evil clone?", "Why don’t you have an evil clone?", "Are you jealous?? I could make you one if you help me!"],
+        ["Awesome!! I’m glad that’s settled - you help me,", "I help you. You’ll need to know-"],
+        ["Yeah I know you’re confused you just got resurrected AGAIN", "that’s why I’m telling you this!!"],
+        ["Okay. You see that lever over there? Yeah!", "You can flip those with E. Levers do things."],
+        ["This place has gotten sickeningly dangerous too - Debris", "blocks your way and my clone’s minions prowl the halls.", "The rose bushes have always been there,"],
+        ["but they definitely also hurt so watch yourself.", "You can keep yourself safe from everything", "by attacking with J."], ["I guess if you perish (AGAIN) in your attempt you’ll", "just end up back here, so good luck!"],
+        ["npc ending dialogue (#11) - DOES NOT SHOW"],
+        // Boss dialogue here
+        ["Oh? You're back again so soon? So eager to die,", "maybe you won't come back again this time."],
+        ["What? You look surprised. Did she not tell you how many", "times you've been here? A shame."],
+        ["Why are you even trying when you already know how it'll end?", "For her? For yourself? For the sake of the punishment?"],
+        ["..."], ["Are you ready, my star? Let's give them", "a performance they won't forget!"],
+        ["17 - current boss placeholder ending dialogue"]];
 
     // Set interval for redrawing
     setInterval(mainLoop, 33);
@@ -1315,7 +1379,7 @@ function defineRooms() {
         destructible: true,
         destroyed: false
     };
-    r1Heal.sprite.src = "assets/game_assets/sprites/hearticon.png";
+    r1Heal.sprite.src = "assets/game_assets/sprites/heal.png";
 
 
     // Room 2
@@ -1688,7 +1752,7 @@ function defineRooms() {
         destructible: true,
         destroyed: false
     };
-    r4Heal.sprite.src = "assets/game_assets/sprites/hearticon.png";
+    r4Heal.sprite.src = "assets/game_assets/sprites/heal.png";
 
     r4clown1 = {
         X: 645,
@@ -1933,14 +1997,14 @@ function defineRooms() {
         ID: "r1top1",
         X: 0,
         Y: 0,
-        W: 160,
+        W: 150,
         H: defaultBorder,
         destructible: false,
         destroyed: false
     };
     room1Top2 = {
         ID: "r1top2",
-        X: 240,
+        X: 250,
         Y: 0,
         W: canvasSize.W - 320,
         H: defaultBorder,
@@ -1979,16 +2043,16 @@ function defineRooms() {
         X: 320,
         Y: 80,
         W: defaultBorder,
-        H: defaultBorder,
+        H: defaultBorder - 10,
         destructible: false,
         destroyed: false
     };
     room1Wall3 = {
         ID: "r1wall3",
         X: 320,
-        Y: 240,
+        Y: 240 + 10,
         W: defaultBorder,
-        H: defaultBorder,
+        H: defaultBorder - 10,
         destructible: false,
         destroyed: false
     };
@@ -1997,16 +2061,16 @@ function defineRooms() {
         X: 720,
         Y: 80,
         W: defaultBorder,
-        H: defaultBorder,
+        H: defaultBorder - 10,
         destructible: false,
         destroyed: false
     };
     room1Wall5 = {
         ID: "r1wall5",
         X: 720,
-        Y: 240,
+        Y: 240 + 10,
         W: defaultBorder,
-        H: defaultBorder,
+        H: defaultBorder - 10,
         destructible: false,
         destroyed: false
     };
@@ -2027,14 +2091,14 @@ function defineRooms() {
         ID: "r2bottom1",
         X: 0,
         Y: canvasSize.H - defaultBorder,
-        W: 160,
+        W: 150,
         H: defaultBorder,
         destructible: false,
         destroyed: false
     };
     room2Bottom2 = {
         ID: "r2bottom2",
-        X: 240,
+        X: 250,
         Y: canvasSize.H - defaultBorder,
         W: canvasSize.W - 320,
         H: defaultBorder,
@@ -2046,14 +2110,14 @@ function defineRooms() {
         X: 0,
         Y: 0,
         W: defaultBorder,
-        H: 160,
+        H: 150,
         destructible: false,
         destroyed: false
     };
     room2Left2 = {
         ID: "r2left2",
         X: 0,
-        Y: 240,
+        Y: 250,
         W: defaultBorder,
         H: 400,
         destructible: false,
@@ -2064,14 +2128,14 @@ function defineRooms() {
         X: canvasSize.W - defaultBorder,
         Y: 0,
         W: defaultBorder,
-        H: 320,
+        H: 310,
         destructible: false,
         destroyed: false
     };
     room2Right2 = {
         ID: "r2right2",
         X: canvasSize.W - defaultBorder,
-        Y: 400,
+        Y: 410,
         W: defaultBorder,
         H: 320,
         destructible: false,
@@ -2095,14 +2159,14 @@ function defineRooms() {
         X: canvasSize.W - 80,
         Y: 0,
         W: defaultBorder,
-        H: 160,
+        H: 150,
         destructible: false,
         destroyed: false
     };
     room3Right2 = {
         ID: "r3right2",
         X: canvasSize.W - 80,
-        Y: 240,
+        Y: 250,
         W: defaultBorder,
         H: 400,
         destructible: false,
@@ -2112,26 +2176,26 @@ function defineRooms() {
         ID: "r3w1",
         X: 480,
         Y: 160,
-        W: defaultBorder,
+        W: defaultBorder - 10,
         H: 480,
         destructible: false,
         destroyed: false
     };
     room3Wall2 = {
         ID: "r3w2",
-        X: 880,
+        X: 890,
         Y: 0,
-        W: defaultBorder,
-        H: 560,
+        W: defaultBorder - 10,
+        H: 550,
         destructible: false,
         destroyed: false
     };
     room3Wall3 = {
         ID: "r3w3",
-        X: 640,
-        Y: 480,
-        W: 320,
-        H: defaultBorder,
+        X: 650,
+        Y: 490,
+        W: 320 - 10,
+        H: defaultBorder - 20,
         destructible: false,
         destroyed: false
     };
@@ -2162,14 +2226,14 @@ function defineRooms() {
         X: 0,
         Y: 0,
         W: defaultBorder,
-        H: 320,
+        H: 310,
         destructible: false,
         destroyed: false
     };
     room4Left2 = {
         ID: "r4l2",
         X: 0,
-        Y: 400,
+        Y: 410,
         W: defaultBorder,
         H: 320,
         destructible: false,
