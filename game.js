@@ -110,28 +110,28 @@ function handle_boss() {
         } else if (bossTicks >= 25 && fightStartSequence === 1) { // Looking around VV
             fightStartSequence++;
             char.direction = 2;
-            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerDown.png";
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
         } else if (bossTicks >= 15 + 25 && fightStartSequence === 2) {
             fightStartSequence++;
             char.direction = 3;
-            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerLeft.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerLeft.png";
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
         } else if (bossTicks >= 30 + 25 && fightStartSequence === 3) {
             fightStartSequence++;
             char.direction = 2;
-            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerDown.png";
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
         } else if (bossTicks >= 45 + 25 && fightStartSequence === 4) {
             fightStartSequence++;
             char.direction = 1;
-            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerRight.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerRight.png";
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
@@ -472,12 +472,12 @@ function endGame() {
 
     setTimeout(() => { // Look down
         char.direction = 2;
-        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerDown.png";
     }, 1000);
 
     setTimeout(() => { // Look back
         char.direction = 1;
-        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerRight.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerRight.png";
     }, 1000);
     setTimeout(() => { // Disable spotlight
         fightStartSequence = -1;
@@ -856,22 +856,22 @@ function KeyDown() {
         H: char.H,
         W: char.W
     })) && control) {     // Handle WASD movement
-        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerRight.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerRight.png";
         char.direction = 1;
         char.X += char.speed;
     }
     if (event.key === "a" && (!checkCollision({X: char.X - char.speed, Y: char.Y, H: char.H, W: char.W})) && control) {
-        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerLeft.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerLeft.png";
         char.direction = 3;
         char.X -= char.speed;
     }
     if (event.key === "w" && (!checkCollision({X: char.X, Y: char.Y - char.speed, H: char.H, W: char.W})) && control) {
-        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerUp.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerUp.png";
         char.direction = 0;
         char.Y -= char.speed;
     }
     if (event.key === "s" && (!checkCollision({X: char.X, Y: char.Y + char.speed, H: char.H, W: char.W})) && control) {
-        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerDown.png";
         char.direction = 2;
         char.Y += char.speed;
     }
@@ -965,16 +965,16 @@ function check_dmg(obj) {
         dmgSpriteTemp = char.sprite.src;
         if (char.direction === 0) {
             char.Y += char.speed * 4;
-            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerUp_Hurt.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerUp_Hurt.png";
         } else if (char.direction === 1) {
             char.X -= char.speed * 4;
-            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerRight_Hurt.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerRight_Hurt.png";
         } else if (char.direction === 2) {
             char.Y -= char.speed * 4;
-            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerBack_Hurt.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerBack_Hurt.png";
         } else if (char.direction === 3) {
             char.X += char.speed * 4;
-            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerLeft_Hurt.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerLeft_Hurt.png";
         }
     }
 
@@ -991,13 +991,13 @@ function handle_animation() {
             char.sprite.src = char.sprite.src = `assets/game_assets/player/melee/frame${charAttackFrame}.png`;
         } else {
             if (char.direction === 0) {
-                char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerUp.png";
+                char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerUp.png";
             } else if (char.direction === 1) {
-                char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerRight.png";
+                char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerRight.png";
             } else if (char.direction === 2) {
-                char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
+                char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerDown.png";
             } else if (char.direction === 3) {
-                char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerLeft.png";
+                char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerLeft.png";
             }
             charAttackFrame = 0;
         }
@@ -1190,7 +1190,7 @@ function init() {
         hp: 5,
         direction: 2, // 0-Up 1-Right 2-Down 3-Left
     };
-    char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
+    char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/playerDown.png";
 
     dmgSpriteTemp = new Image();
 
