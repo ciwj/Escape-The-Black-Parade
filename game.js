@@ -110,7 +110,7 @@ function handle_boss() {
         } else if (bossTicks >= 25 && fightStartSequence === 1) { // Looking around VV
             fightStartSequence++;
             char.direction = 2;
-            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
+            char.sprite.src = "https://github.com/ciwj/Escape-The-Black-Parade/blob/main/Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
@@ -124,7 +124,7 @@ function handle_boss() {
         } else if (bossTicks >= 30 + 25 && fightStartSequence === 3) {
             fightStartSequence++;
             char.direction = 2;
-            char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
+            char.sprite.src = "https://github.com/ciwj/Escape-The-Black-Parade/blob/main/Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
@@ -472,7 +472,7 @@ function endGame() {
 
     setTimeout(() => { // Look down
         char.direction = 2;
-        char.sprite.src = "Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
+        char.sprite.src = "https://github.com/ciwj/Escape-The-Black-Parade/blob/main/Escape-The-Black-Parade/assets/game_assets/player/PlayerDown.png";
     }, 1000);
 
     setTimeout(() => { // Look back
