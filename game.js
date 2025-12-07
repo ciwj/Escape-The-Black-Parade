@@ -110,28 +110,28 @@ function handle_boss() {
         } else if (bossTicks >= 25 && fightStartSequence === 1) { // Looking around VV
             fightStartSequence++;
             char.direction = 2;
-            char.sprite.src = "assets/game_assets/player/PlayerDown.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/PlayerDown.png";
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
         } else if (bossTicks >= 15 + 25 && fightStartSequence === 2) {
             fightStartSequence++;
             char.direction = 3;
-            char.sprite.src = "assets/game_assets/player/PlayerLeft.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/PlayerLeft.png";
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
         } else if (bossTicks >= 30 + 25 && fightStartSequence === 3) {
             fightStartSequence++;
             char.direction = 2;
-            char.sprite.src = "assets/game_assets/player/PlayerDown.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/PlayerDown.png";
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
         } else if (bossTicks >= 45 + 25 && fightStartSequence === 4) {
             fightStartSequence++;
             char.direction = 1;
-            char.sprite.src = "assets/game_assets/player/PlayerRight.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/PlayerRight.png";
             if (verbose > 0) {
                 console.log(`Ticks & Sequence: ${bossTicks}, ${fightStartSequence}`);
             }
@@ -241,7 +241,7 @@ function throwFireballs() {
             speed: 10,
             direction: -1
         };
-        newFireball.sprite.src = "assets/game_assets/sprites/fireball.png"; // Duplicate fireball
+        newFireball.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/fireball.png"; // Duplicate fireball
 
         // Select random X, Y, and direction
         let randomX = Math.floor(Math.random() * 720 - 0.0001) + 90;
@@ -344,7 +344,7 @@ function summonEnemies() {
                         speed: 3,
                         type: "Clown"
                     };
-                    newEnemy.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+                    newEnemy.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/ClownDown.png";
                 } else {
                     newEnemy = {
                         X: randomCoordsX,
@@ -365,7 +365,7 @@ function summonEnemies() {
                         speed: 5,
                         type: "Vamp"
                     };
-                    newEnemy.sprite.src = "assets/game_assets/non_player/VampDown.png";
+                    newEnemy.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/VampDown.png";
                 }
 
                 room5dmgable.push(newEnemy);
@@ -446,7 +446,7 @@ function summonRoses() {
                     destroyed: false,
                     type: "rose"
                 };
-                newRose.sprite.src = "assets/game_assets/sprites/roses.png";
+                newRose.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
                 room5Roses.push(newRose);
                 room5dmgable.push(newRose);
@@ -472,12 +472,12 @@ function endGame() {
 
     setTimeout(() => { // Look down
         char.direction = 2;
-        char.sprite.src = "assets/game_assets/player/PlayerDown.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/PlayerDown.png";
     }, 1000);
 
     setTimeout(() => { // Look back
         char.direction = 1;
-        char.sprite.src = "assets/game_assets/player/PlayerRight.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/PlayerRight.png";
     }, 1000);
     setTimeout(() => { // Disable spotlight
         fightStartSequence = -1;
@@ -511,14 +511,14 @@ function drawUI() {
     let drawCorner = 980;
 
     let heartIcon = new Image();
-    heartIcon.src = "assets/game_assets/sprites/hearticon.png";
+    heartIcon.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/hearticon.png";
     ctx.drawImage(heartIcon, drawCorner, 5);
     drawCorner += 120;
 
     let fullImg = new Image();
-    fullImg.src = "/assets/game_assets/sprites/fullnote.png";
+    fullImg.src = "/Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/fullnote.png";
     let halfImg = new Image();
-    halfImg.src = "/assets/game_assets/sprites/halfnote.png";
+    halfImg.src = "/Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/halfnote.png";
 
     while (tempHP > 0) {
         if (tempHP > 1) {
@@ -623,16 +623,16 @@ function doMovement() {
 
                         switch (randomDir) {
                             case 0:
-                                movingObj.sprite.src = `assets/game_assets/non_player/${movingObj.type}Up.png`;
+                                movingObj.sprite.src = `Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/${movingObj.type}Up.png`;
                                 break;
                             case 1:
-                                movingObj.sprite.src = `assets/game_assets/non_player/${movingObj.type}Right.png`;
+                                movingObj.sprite.src = `Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/${movingObj.type}Right.png`;
                                 break;
                             case 2:
-                                movingObj.sprite.src = `assets/game_assets/non_player/${movingObj.type}Down.png`;
+                                movingObj.sprite.src = `Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/${movingObj.type}Down.png`;
                                 break;
                             case 3:
-                                movingObj.sprite.src = `assets/game_assets/non_player/${movingObj.type}Left.png`;
+                                movingObj.sprite.src = `Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/${movingObj.type}Left.png`;
                                 break;
                         }
 
@@ -690,7 +690,7 @@ function changeRoom() {
         room = 3;
         char.X = canvasSize.W - defaultBorder;
     }
-    roomAsset.src = `assets/game_assets/rooms/room${room}.png`;
+    roomAsset.src = `Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/rooms/room${room}.png`;
 }
 
 // Helper f'n to draw a rectangle from a literal
@@ -726,23 +726,23 @@ function attemptInteract() {
                 if (!roomObjects[room][i].flipped) {
                     r1Door.destroyed = true;
                     roomObjects[room][i].flipped = true;
-                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_right.png";
+                    roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_right.png";
                     leverSound.play();
                 } else {
                     //r1Door.destroyed = false;
                     //roomObjects[room][i].flipped = false;
-                    //roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_left.png";
+                    //roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_left.png";
                 }
 
             }
             if (roomObjects[room][i].interactionID === 2) { // If it's room 3 lever 1
                 if (!roomObjects[room][i].flipped) {
                     roomObjects[room][i].flipped = true;
-                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_right.png";
+                    roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_right.png";
 
                 } else {
                     roomObjects[room][i].flipped = false;
-                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_left.png";
+                    roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_left.png";
                 }
                 r3Door3.destroyed = !r3Door3.destroyed;
                 leverSound.play();
@@ -750,10 +750,10 @@ function attemptInteract() {
             if (roomObjects[room][i].interactionID === 3) { // If it's room 3 lever 2
                 if (!roomObjects[room][i].flipped) {
                     roomObjects[room][i].flipped = true;
-                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_right.png";
+                    roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_right.png";
                 } else {
                     roomObjects[room][i].flipped = false;
-                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_left.png";
+                    roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_left.png";
                 }
                 r3Door2.destroyed = !r3Door2.destroyed;
                 r3Door3.destroyed = !r3Door3.destroyed;
@@ -762,10 +762,10 @@ function attemptInteract() {
             if (roomObjects[room][i].interactionID === 4) { // If it's room 3 lever 3
                 if (!roomObjects[room][i].flipped) {
                     roomObjects[room][i].flipped = true;
-                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_right.png";
+                    roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_right.png";
                 } else {
                     roomObjects[room][i].flipped = false;
-                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_left.png";
+                    roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_left.png";
                 }
                 r3Door1.destroyed = !r3Door1.destroyed;
                 r3Door2.destroyed = !r3Door2.destroyed;
@@ -774,7 +774,7 @@ function attemptInteract() {
             if (roomObjects[room][i].interactionID === 5) { // If it's room 3 lever 4
                 if (!roomObjects[room][i].flipped) {
                     roomObjects[room][i].flipped = true;
-                    roomObjects[room][i].sprite.src = "assets/game_assets/sprites/lever_right.png";
+                    roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_right.png";
                 }
                 r2Door.destroyed = true;
                 leverSound.play();
@@ -856,22 +856,22 @@ function KeyDown() {
         H: char.H,
         W: char.W
     })) && control) {     // Handle WASD movement
-        char.sprite.src = "assets/game_assets/player/playerRight.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/playerRight.png";
         char.direction = 1;
         char.X += char.speed;
     }
     if (event.key === "a" && (!checkCollision({X: char.X - char.speed, Y: char.Y, H: char.H, W: char.W})) && control) {
-        char.sprite.src = "assets/game_assets/player/playerLeft.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/playerLeft.png";
         char.direction = 3;
         char.X -= char.speed;
     }
     if (event.key === "w" && (!checkCollision({X: char.X, Y: char.Y - char.speed, H: char.H, W: char.W})) && control) {
-        char.sprite.src = "assets/game_assets/player/playerUp.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/playerUp.png";
         char.direction = 0;
         char.Y -= char.speed;
     }
     if (event.key === "s" && (!checkCollision({X: char.X, Y: char.Y + char.speed, H: char.H, W: char.W})) && control) {
-        char.sprite.src = "assets/game_assets/player/playerDown.png";
+        char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/playerDown.png";
         char.direction = 2;
         char.Y += char.speed;
     }
@@ -925,13 +925,13 @@ function handle_dmg() {
     if(dummy.invincible > 0) {
         dummy.invincible--
         if(dummy.invincible === 1) {
-            dummy.sprite.src = "assets/game_assets/non_player/dummy.png";
+            dummy.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/dummy.png";
         }
     }
     if(bossMiku.invincible > 0) {
         bossMiku.invincible--
         if(bossMiku.invincible === 1) {
-            bossMiku.sprite.src = "assets/game_assets/non_player/miku.png";
+            bossMiku.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/miku.png";
         }
     }
     if (invincible > 0) { // count i-frames
@@ -965,16 +965,16 @@ function check_dmg(obj) {
         dmgSpriteTemp = char.sprite.src;
         if (char.direction === 0) {
             char.Y += char.speed * 4;
-            char.sprite.src = "assets/game_assets/player/PlayerUp_Hurt.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/PlayerUp_Hurt.png";
         } else if (char.direction === 1) {
             char.X -= char.speed * 4;
-            char.sprite.src = "assets/game_assets/player/PlayerRight_Hurt.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/PlayerRight_Hurt.png";
         } else if (char.direction === 2) {
             char.Y -= char.speed * 4;
-            char.sprite.src = "assets/game_assets/player/PlayerBack_Hurt.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/PlayerBack_Hurt.png";
         } else if (char.direction === 3) {
             char.X += char.speed * 4;
-            char.sprite.src = "assets/game_assets/player/PlayerLeft_Hurt.png";
+            char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/PlayerLeft_Hurt.png";
         }
     }
 
@@ -988,16 +988,16 @@ function handle_animation() {
     if (charAttackFrame !== 0) {
         charAttackFrame++;
         if (charAttackFrame <= 11) {
-            char.sprite.src = char.sprite.src = `assets/game_assets/player/melee/frame${charAttackFrame}.png`;
+            char.sprite.src = char.sprite.src = `Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/melee/frame${charAttackFrame}.png`;
         } else {
             if (char.direction === 0) {
-                char.sprite.src = "assets/game_assets/player/playerUp.png";
+                char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/playerUp.png";
             } else if (char.direction === 1) {
-                char.sprite.src = "assets/game_assets/player/playerRight.png";
+                char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/playerRight.png";
             } else if (char.direction === 2) {
-                char.sprite.src = "assets/game_assets/player/playerDown.png";
+                char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/playerDown.png";
             } else if (char.direction === 3) {
-                char.sprite.src = "assets/game_assets/player/playerLeft.png";
+                char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/playerLeft.png";
             }
             charAttackFrame = 0;
         }
@@ -1023,10 +1023,10 @@ function melee() {
             if (checkCollBetween(boxToCheck, roomObjects[room][i]) && roomObjects[room][i].enemy) {
                 roomObjects[room][i].hp--
                 if(roomObjects[room][i].type === "theDummy") {
-                    roomObjects[room][i].sprite.src = "assets/game_assets/non_player/dummy_hurt.png";
+                    roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/dummy_hurt.png";
                     roomObjects[room][i].invincible = 10;
                 } else if (roomObjects[room][i].type === "miku") {
-                    roomObjects[room][i].sprite.src = "assets/game_assets/non_player/miku_hurt.png";
+                    roomObjects[room][i].sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/miku_hurt.png";
                     roomObjects[room][i].invincible = 10;
                 }
                 if (roomObjects[room][i].hp <= 0) {
@@ -1038,7 +1038,7 @@ function melee() {
             }
         }
         charAttackFrame = 1;
-        char.sprite.src = `assets/game_assets/player/melee/frame${charAttackFrame}.png`;
+        char.sprite.src = `Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/melee/frame${charAttackFrame}.png`;
     }
 
 
@@ -1129,15 +1129,15 @@ function init() {
     ctx.font = "40px Helvetica";
 
     // Define sounds
-    leverSound = new Audio('assets/game_assets/misc/lever.mp3');
-    spawnSound = new Audio('assets/game_assets/misc/spawn.mp3');
-    gameOverSound = new Audio('assets/game_assets/misc/game_over.mp3');
-    healSound = new Audio('assets/game_assets/misc/heal.mp3');
-    bossStartSound = new Audio('assets/game_assets/misc/wayBlocked.mp3');
-    laughSound = new Audio('assets/game_assets/misc/laugh.mp3');
+    leverSound = new Audio('Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/lever.mp3');
+    spawnSound = new Audio('Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/spawn.mp3');
+    gameOverSound = new Audio('Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/game_over.mp3');
+    healSound = new Audio('Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/heal.mp3');
+    bossStartSound = new Audio('Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/wayBlocked.mp3');
+    laughSound = new Audio('Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/laugh.mp3');
 
-    normalBGMusic = new Audio('assets/game_assets/misc/mama.mp3');
-    bossMusic = new Audio('assets/game_assets/misc/dead!.mp3');
+    normalBGMusic = new Audio('Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/mama.mp3');
+    bossMusic = new Audio('Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/dead!.mp3');
 
 
     // Define game size and default wall border
@@ -1148,7 +1148,7 @@ function init() {
     defaultBorder = 80;
 
     roomAsset = new Image();
-    roomAsset.src = "assets/game_assets/rooms/room0.png";
+    roomAsset.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/rooms/room0.png";
 
     // Define game state variables
     gameStarted = false;
@@ -1190,7 +1190,7 @@ function init() {
         hp: 5,
         direction: 2, // 0-Up 1-Right 2-Down 3-Left
     };
-    char.sprite.src = "assets/game_assets/player/playerDown.png";
+    char.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/player/playerDown.png";
 
     dmgSpriteTemp = new Image();
 
@@ -1200,25 +1200,25 @@ function init() {
 
     // Define UI assets
     pressAnyKey = new Image();
-    pressAnyKey.src = "assets/game_assets/misc/pressAnyKey.png";
+    pressAnyKey.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/pressAnyKey.png";
 
     gameWon1 = new Image();
-    gameWon1.src = "assets/game_assets/misc/win1.png";
+    gameWon1.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/win1.png";
 
     gameWon2 = new Image();
-    gameWon2.src = "assets/game_assets/misc/win2.png";
+    gameWon2.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/win2.png";
 
     gameWon3 = new Image();
-    gameWon3.src = "assets/game_assets/misc/win3.png";
+    gameWon3.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/win3.png";
 
     gameWon4 = new Image();
-    gameWon4.src = "assets/game_assets/misc/win4.png";
+    gameWon4.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/win4.png";
 
     gameOverImg = new Image();
-    gameOverImg.src = "assets/game_assets/misc/gameover.png";
+    gameOverImg.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/gameover.png";
 
     dialogueImg = new Image();
-    dialogueImg.src = "assets/game_assets/misc/dialogue.png";
+    dialogueImg.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/misc/dialogue.png";
 
 
     // Define dialogue
@@ -1266,7 +1266,7 @@ function defineRooms() {
         destructible: false,
         destroyed: false
     };
-    miku.sprite.src = "assets/game_assets/sprites/npc.png";
+    miku.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/npc.png";
 
     dummy = {
         X: 85,
@@ -1282,7 +1282,7 @@ function defineRooms() {
         type: "theDummy",
         invincible: 0
     };
-    dummy.sprite.src = "assets/game_assets/non_player/dummy.png";
+    dummy.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/dummy.png";
 
     r1Door = {
         X: 720,
@@ -1295,7 +1295,7 @@ function defineRooms() {
         destructible: false,
         destroyed: false
     };
-    r1Door.sprite.src = "assets/game_assets/sprites/door.png";
+    r1Door.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/door.png";
 
     r1Lever = {
         X: 490,
@@ -1310,7 +1310,7 @@ function defineRooms() {
         destroyed: false,
         flipped: false
     };
-    r1Lever.sprite.src = "assets/game_assets/sprites/lever_left.png";
+    r1Lever.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_left.png";
 
     r1Obstacle = {
         X: 320,
@@ -1324,7 +1324,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r1Obstacle.sprite.src = "assets/game_assets/sprites/obstacle.png";
+    r1Obstacle.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/obstacle.png";
 
     r1rose1 = {
         X: 240,
@@ -1338,7 +1338,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r1rose1.sprite.src = "assets/game_assets/sprites/roses.png";
+    r1rose1.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r1rose2 = {
         X: 240,
@@ -1352,7 +1352,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r1rose2.sprite.src = "assets/game_assets/sprites/roses.png";
+    r1rose2.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r1rose3 = {
         X: 240,
@@ -1366,7 +1366,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r1rose3.sprite.src = "assets/game_assets/sprites/roses.png";
+    r1rose3.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r1Heal = {
         X: 485,
@@ -1379,7 +1379,7 @@ function defineRooms() {
         destructible: true,
         destroyed: false
     };
-    r1Heal.sprite.src = "assets/game_assets/sprites/heal.png";
+    r1Heal.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/heal.png";
 
 
     // Room 2
@@ -1402,7 +1402,7 @@ function defineRooms() {
         speed: 3,
         type: "Clown"
     };
-    r2clown.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+    r2clown.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/ClownDown.png";
 
     r2vamp = {
         X: 565,
@@ -1423,7 +1423,7 @@ function defineRooms() {
         speed: 5,
         type: "Vamp"
     };
-    r2vamp.sprite.src = "assets/game_assets/non_player/VampDown.png";
+    r2vamp.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/VampDown.png";
 
     r2Door = {
         X: 1200,
@@ -1436,7 +1436,7 @@ function defineRooms() {
         destructible: false,
         destroyed: false
     };
-    r2Door.sprite.src = "assets/game_assets/sprites/door.png";
+    r2Door.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/door.png";
 
     r2Obstacle = {
         X: 80,
@@ -1450,7 +1450,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r2Obstacle.sprite.src = "assets/game_assets/sprites/obstacle.png";
+    r2Obstacle.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/obstacle.png";
 
     r2rose1 = {
         X: 1040,
@@ -1464,7 +1464,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r2rose1.sprite.src = "assets/game_assets/sprites/roses.png";
+    r2rose1.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r2rose2 = {
         X: 1040,
@@ -1478,7 +1478,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r2rose2.sprite.src = "assets/game_assets/sprites/roses.png";
+    r2rose2.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r2rose3 = {
         X: 1120,
@@ -1492,7 +1492,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r2rose3.sprite.src = "assets/game_assets/sprites/roses.png";
+    r2rose3.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r2rose4 = {
         X: 1120,
@@ -1506,7 +1506,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r2rose4.sprite.src = "assets/game_assets/sprites/roses.png";
+    r2rose4.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r2rose5 = {
         X: 1120,
@@ -1520,7 +1520,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r2rose5.sprite.src = "assets/game_assets/sprites/roses.png";
+    r2rose5.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r2rose6 = {
         X: 1120,
@@ -1534,7 +1534,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r2rose6.sprite.src = "assets/game_assets/sprites/roses.png";
+    r2rose6.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     // Room 3
     r3clown = {
@@ -1556,7 +1556,7 @@ function defineRooms() {
         speed: 3,
         type: "Clown"
     };
-    r3clown.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+    r3clown.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/ClownDown.png";
 
     r3rose = {
         X: 560,
@@ -1570,7 +1570,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r3rose.sprite.src = "assets/game_assets/sprites/roses.png";
+    r3rose.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r3Door1 = {
         X: 880,
@@ -1583,7 +1583,7 @@ function defineRooms() {
         destructible: false,
         destroyed: false
     };
-    r3Door1.sprite.src = "assets/game_assets/sprites/door.png";
+    r3Door1.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/door.png";
 
     r3Door2 = {
         X: 640,
@@ -1596,7 +1596,7 @@ function defineRooms() {
         destructible: false,
         destroyed: false
     };
-    r3Door2.sprite.src = "assets/game_assets/sprites/door.png";
+    r3Door2.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/door.png";
 
     r3Door3 = {
         X: 560,
@@ -1609,7 +1609,7 @@ function defineRooms() {
         destructible: false,
         destroyed: false
     };
-    r3Door3.sprite.src = "assets/game_assets/sprites/door.png";
+    r3Door3.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/door.png";
 
     r3Lever1 = {
         X: 1130,
@@ -1624,7 +1624,7 @@ function defineRooms() {
         destroyed: false,
         flipped: false
     };
-    r3Lever1.sprite.src = "assets/game_assets/sprites/lever_left.png";
+    r3Lever1.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_left.png";
 
     r3Lever2 = {
         X: 1050,
@@ -1639,7 +1639,7 @@ function defineRooms() {
         destroyed: false,
         flipped: false
     };
-    r3Lever2.sprite.src = "assets/game_assets/sprites/lever_left.png";
+    r3Lever2.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_left.png";
 
     r3Lever3 = {
         X: 970,
@@ -1654,7 +1654,7 @@ function defineRooms() {
         destroyed: false,
         flipped: false
     };
-    r3Lever3.sprite.src = "assets/game_assets/sprites/lever_left.png";
+    r3Lever3.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_left.png";
 
     r3Lever4 = {
         X: 250,
@@ -1668,7 +1668,7 @@ function defineRooms() {
         destructible: false,
         destroyed: false
     };
-    r3Lever4.sprite.src = "assets/game_assets/sprites/lever_left.png";
+    r3Lever4.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/lever_left.png";
 
     r3Obstacle1 = {
         X: 800,
@@ -1682,7 +1682,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r3Obstacle1.sprite.src = "assets/game_assets/sprites/obstacle.png";
+    r3Obstacle1.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/obstacle.png";
 
     r3Obstacle2 = {
         X: 800,
@@ -1696,7 +1696,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r3Obstacle2.sprite.src = "assets/game_assets/sprites/obstacle.png";
+    r3Obstacle2.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/obstacle.png";
 
     r3Obstacle3 = {
         X: 560,
@@ -1710,7 +1710,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r3Obstacle3.sprite.src = "assets/game_assets/sprites/obstacle.png";
+    r3Obstacle3.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/obstacle.png";
 
     r3Obstacle4 = {
         X: 560,
@@ -1724,7 +1724,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r3Obstacle4.sprite.src = "assets/game_assets/sprites/obstacle.png";
+    r3Obstacle4.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/obstacle.png";
 
     r3Obstacle5 = {
         X: 640,
@@ -1738,7 +1738,7 @@ function defineRooms() {
         hp: 1,
         destroyed: false
     };
-    r3Obstacle5.sprite.src = "assets/game_assets/sprites/obstacle.png";
+    r3Obstacle5.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/obstacle.png";
 
     // Room 4
     r4Heal = {
@@ -1752,7 +1752,7 @@ function defineRooms() {
         destructible: true,
         destroyed: false
     };
-    r4Heal.sprite.src = "assets/game_assets/sprites/heal.png";
+    r4Heal.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/heal.png";
 
     r4clown1 = {
         X: 645,
@@ -1773,7 +1773,7 @@ function defineRooms() {
         speed: 3,
         type: "Clown"
     };
-    r4clown1.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+    r4clown1.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/ClownDown.png";
 
     r4clown2 = {
         X: 645,
@@ -1794,7 +1794,7 @@ function defineRooms() {
         speed: 3,
         type: "Clown"
     };
-    r4clown1.sprite.src = "assets/game_assets/non_player/ClownDown.png";
+    r4clown1.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/ClownDown.png";
 
     // Room 5
     r5Obstacle = {
@@ -1810,7 +1810,7 @@ function defineRooms() {
         destroyed: true,
         type: "obstacle"
     };
-    r5Obstacle.sprite.src = "assets/game_assets/sprites/wall.png";
+    r5Obstacle.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/wall.png";
 
     r5rose1 = {
         X: 720,
@@ -1825,7 +1825,7 @@ function defineRooms() {
         destroyed: false,
         type: "rose"
     };
-    r5rose1.sprite.src = "assets/game_assets/sprites/roses.png";
+    r5rose1.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r5rose2 = {
         X: 720,
@@ -1840,7 +1840,7 @@ function defineRooms() {
         destroyed: false,
         type: "rose"
     };
-    r5rose2.sprite.src = "assets/game_assets/sprites/roses.png";
+    r5rose2.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r5rose3 = {
         X: 640,
@@ -1855,7 +1855,7 @@ function defineRooms() {
         destroyed: false,
         type: "rose"
     };
-    r5rose3.sprite.src = "assets/game_assets/sprites/roses.png";
+    r5rose3.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r5rose4 = {
         X: 640,
@@ -1870,7 +1870,7 @@ function defineRooms() {
         destroyed: false,
         type: "rose"
     };
-    r5rose4.sprite.src = "assets/game_assets/sprites/roses.png";
+    r5rose4.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     r5rose5 = {
         X: 560,
@@ -1885,7 +1885,7 @@ function defineRooms() {
         destroyed: false,
         type: "rose"
     };
-    r5rose5.sprite.src = "assets/game_assets/sprites/roses.png";
+    r5rose5.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
     bossMiku = {
         X: 1040,
@@ -1902,7 +1902,7 @@ function defineRooms() {
         speed: 5,
         type: "miku"
     };
-    bossMiku.sprite.src = "assets/game_assets/non_player/miku.png";
+    bossMiku.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/non_player/miku.png";
 
     dummyBossInteract = {
         X: 165 + 80,
@@ -1932,7 +1932,7 @@ function defineRooms() {
         destroyed: true,
         type: "curtains"
     }
-    curtains.sprite.src = "assets/game_assets/rooms/curtains.png";
+    curtains.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/rooms/curtains.png";
 
     curtainsDrawn = {
         X: 873,
@@ -1947,7 +1947,7 @@ function defineRooms() {
         destroyed: false,
         type: "curtainsDrawn"
     }
-    curtainsDrawn.sprite.src = "assets/game_assets/rooms/curtainsDrawn.png";
+    curtainsDrawn.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/rooms/curtainsDrawn.png";
 
     spotlight = {
         sprite: new Image(),
@@ -1956,7 +1956,7 @@ function defineRooms() {
         offsetX: char.W / 2 - 240 / 2,
         offsetY: char.H - 326 + 60
     };
-    spotlight.sprite.src = "assets/game_assets/rooms/spotlight_red.png";
+    spotlight.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/rooms/spotlight_red.png";
 
     room1Objects = [miku, dummy, r1Door, r1Lever, r1Obstacle, r1rose1, r1rose2, r1rose3, r1Heal];
     room2Objects = [r2Door, r2Obstacle, r2rose1, r2rose2, r2rose3, r2rose4, r2rose5, r2rose6, r2clown, r2vamp];
@@ -2285,7 +2285,7 @@ function defineRooms() {
             hp: 1,
             destroyed: false
         };
-        roseObj1.sprite.src = "assets/game_assets/sprites/roses.png";
+        roseObj1.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
         roseObj2 = {
             X: i * 80,
             Y: 560,
@@ -2298,7 +2298,7 @@ function defineRooms() {
             hp: 1,
             destroyed: false
         };
-        roseObj2.sprite.src = "assets/game_assets/sprites/roses.png";
+        roseObj2.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
         room4Objects.push(roseObj1, roseObj2);
         room4Collision.push(roseObj1, roseObj2);
         room4dmgable.push(roseObj1, roseObj2);
@@ -2317,7 +2317,7 @@ function defineRooms() {
             hp: 1,
             destroyed: false
         };
-        roseObj1.sprite.src = "assets/game_assets/sprites/roses.png";
+        roseObj1.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
         roseObj2 = {
             X: i * 80,
             Y: 560,
@@ -2330,7 +2330,7 @@ function defineRooms() {
             hp: 1,
             destroyed: false
         };
-        roseObj2.sprite.src = "assets/game_assets/sprites/roses.png";
+        roseObj2.sprite.src = "Escape-The-Black-Parade/assets/game_Escape-The-Black-Parade/assets/sprites/roses.png";
 
         room5Objects.push(roseObj1, roseObj2);
         room5Collision.push(roseObj1, roseObj2);
